@@ -26,7 +26,7 @@ const PageLayout = () => {
     <>
       <Navbar />
       <Outlet />
-      <p>Footer</p>
+      <p className="bg-primary text-primary-content bg-yellow-200">Footer</p>
     </>
   );
 };
