@@ -12,7 +12,7 @@ const Navbar = () => {
           <NavLink to="/requests"> + Add new request </NavLink>
         </div>
         <div className=" ">
-          <NavLink to="/userdashboard"> UserDashboard</NavLink>
+          <NavLink to="/user-dashboard"> UserDashboard</NavLink>
         </div>
         <div className="  ">
           <NavLink to="/login"> Login</NavLink>
