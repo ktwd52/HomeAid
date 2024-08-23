@@ -23,7 +23,14 @@ export default function Requests() {
   } = useForm();
 
   // const onSubmit = (data) => login(data);
-  // const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    const fileInput = document.getElementById("image");
+    const file = fileInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      console.log({ ...data, image: reader.readAsDataURL(file) });
+    }
+  };
   return (
     <>
       {/*       {user ? (
@@ -32,7 +39,10 @@ export default function Requests() {
       <h1 className="flex bg-orange-400 py-16 gap-y-4 px-8">
         Create your Requests
       </h1>
-      <form className="flex bg-orange-400 py-1 gap-y-4 px-1 grid-cols-3  justify-items-start">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex bg-orange-400 py-1 gap-y-4 px-1 grid-cols-3  justify-items-start"
+      >
         <fieldset className="rounded-s-none p-28 max-w-sm mx-auto   grid border-none  bg-lime-200">
           <label htmlFor="titleCategory">
             Title / Category:
@@ -49,8 +59,7 @@ export default function Requests() {
               type="text"
               {...register("requesttext", { required: true })}
               placeholder="Request text:"
-              minlength=""
-              maxlength="88"
+              maxLength="88"
               size="44"
             />
           </label>
@@ -64,17 +73,17 @@ export default function Requests() {
             />
           </label>
           <br />
-          <label for="avatar">Choose a Request picture:</label>
+          <label htmlFor="avatar">Choose a Request picture:</label>
           <input
             type="file"
-            id="request"
-            name="request"
+            id="image"
+            name="image"
             accept="image/png, image/jpeg"
           />
         </fieldset>
         <input
           className="rounded-s-none p-2  mx-auto h-24  border-x-4 bg-yellow-200"
-          type="button"
+          type="submit"
           value="Send Request"
         />
       </form>
