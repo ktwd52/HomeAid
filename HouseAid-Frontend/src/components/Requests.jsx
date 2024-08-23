@@ -24,12 +24,12 @@ export default function Requests() {
 
   // const onSubmit = (data) => login(data);
   const onSubmit = (data) => {
-    const fileInput = document.getElementById("image");
+    /*     const fileInput = document.getElementById("image");
     const file = fileInput.files[0];
     if (file) {
       const reader = new FileReader();
       console.log({ ...data, image: reader.readAsDataURL(file) });
-    }
+    } */
   };
   return (
     <>

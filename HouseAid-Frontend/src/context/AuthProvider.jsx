@@ -12,9 +12,10 @@ const AuthProvider = ({ children }) => {
 
   const login = (data) => {
     console.log(data);
-    // setUser(true);
+    setUser(true);
+    console.log(user);
 
-    axios
+    /*     axios
       .post("https://homeaid-app-api.onrender.com/auth/login", data)
       // .post("http://localhost:3000/auth/login", data)
       .then((res) => {
@@ -23,8 +24,8 @@ const AuthProvider = ({ children }) => {
       })
       .catch((err) => {
         localStorage.removeItem("token");
-      });
-    navigate("/user-dashboard");
+      }); */
+    // navigate("/user-dashboard");
   };
 
   const signup = (data) => {
