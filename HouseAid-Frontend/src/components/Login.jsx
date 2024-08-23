@@ -3,13 +3,13 @@
 };
 
 export default Login; */
-// import { useContext } from "react";
-//  import { AuthContext } from "../context/AuthProvider";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthProvider";
 // import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 export default function Login() {
-  // const { user, login } = useContext(AuthContext);
+  const { user, login } = useContext(AuthContext);
 
   const {
     register,
@@ -17,14 +17,17 @@ export default function Login() {
     formState: { errors },
   } = useForm();
 
-  // const onSubmit = (data) => login(data);
+  const onSubmit = (data) => login(data);
   // const onSubmit = (data) => console.log(data);
   return (
     <>
       {/*       {user ? (
         <Navigate to="/" />
       ) : ( */}
-      <form className="grid bg-orange-400 py-16 gap-y-4 px-8">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid bg-orange-400 py-16 gap-y-4 px-8"
+      >
         <h1>Login</h1>
         <label htmlFor="email">
           Email:
@@ -42,7 +45,7 @@ export default function Login() {
             placeholder="password"
           />
         </label>
-        <input type="button" value="Login" />
+        <input type="submit" value="Login" />
       </form>
       {/* )} */}
     </>
