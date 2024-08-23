@@ -44,7 +44,7 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    axios
+    /* axios
       .get("https://homeaid-app-api.onrender.com/auth/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -60,7 +60,7 @@ const AuthProvider = ({ children }) => {
       })
       .finally(() => {
         setLoading(false);
-      });
+      }); */
   }, []);
 
   return (

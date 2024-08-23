@@ -22,7 +22,7 @@ export default function Login() {
   return (
     <>
       {user ? (
-        <Navigate to="/user-dashboard" />
+        <Navigate to="/app/user-dashboard" />
       ) : (
         <form
           onSubmit={handleSubmit(onSubmit)}

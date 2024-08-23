@@ -21,14 +21,27 @@ import Protected from "./components/Protected";
 import Contact from "./components/Contact"; */
 import AuthProvider from "./context/AuthProvider";
 import Navbar from "./components/Navbar";
+import Profile from "./components/Profile";
 
-const PageLayout = () => {
+const publicLinks = [
+  { name: "Home", value: "/" },
+  { name: "Login", value: "/login" },
+  { name: "Sign Up", value: "/signup" },
+];
+
+const protectedLinks = [
+  { name: "+ Add new request", value: "/app/requests" },
+  { name: "User Dashboard", value: "/app/user-dashboard" },
+  { name: "My Profile", value: "/app/my-profile" },
+];
+
+const PageLayout = ({ links, showLogout }) => {
   const navigate = useNavigate();
 
   return (
     <>
       <AuthProvider>
-        <Navbar />
+        <Navbar links={links} showLogout={showLogout} />
         <Outlet />
       </AuthProvider>
       <p className="bg-primary text-primary-content bg-yellow-200">Footer</p>
@@ -51,19 +64,28 @@ const ErrorBoundary = () => {
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" errorElement={<ErrorBoundary />} element={<PageLayout />}>
-        <Route index element={<Home />} />
-        {/* <Route path="about" element={<About />} /> */}
-        {/* <Route path="contact" element={<Contact />} /> */}
-
-        <Route path="requests" element={<Requests />} />
-        <Route path="/" element={<Protected />}>
-          <Route path="user-dashboard" element={<UserDashboard />} />
+      <>
+        <Route
+          path="/"
+          errorElement={<ErrorBoundary />}
+          element={<PageLayout links={publicLinks} />}
+        >
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<SignUp />} />
         </Route>
-        <Route path="login" element={<Login />} />
-        <Route path="signup" element={<SignUp />} />
-      </Route>
-      // </Route>
+        <Route
+          path="/"
+          errorElement={<ErrorBoundary />}
+          element={<PageLayout links={protectedLinks} showLogout />}
+        >
+          <Route path="app" element={<Protected />}>
+            <Route path="requests" element={<Requests />} />
+            <Route path="user-dashboard" element={<UserDashboard />} />
+            <Route path="my-profile" element={<Profile />} />
+          </Route>
+        </Route>
+      </>
     )
   );
 
