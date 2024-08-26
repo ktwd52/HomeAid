@@ -1,8 +1,3 @@
-/* const SignUp = () => {
-  return <p> SignUp Page</p>;
-};
-
-export default SignUp; */
 import { useForm } from "react-hook-form";
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
@@ -37,20 +32,20 @@ export default function SignUp() {
         onSubmit={handleSubmit(onSubmit)}
         className="grid bg-orange-400 py-16 gap-y-4 px-8"
       >
-        <h1>SignUp</h1>
+        <h1 className=" bg-orange-400 text-xl">Create your Account</h1>
         <fieldset>
           <legend>
-            Create your Account <br /> <br />
-            <label htmlFor="firstName">
-              FirstName:
+            <br />
+            <label htmlFor="username">
+              User Name:
               <input
                 type="text"
-                {...register("firstName", { required: true })}
-                placeholder="firstName"
+                {...register("username", { required: true })}
+                placeholder="userName"
               />
-              <br /> <br />
+              <br />
             </label>
-            <label htmlFor="lastName">
+            {/*    <label htmlFor="lastName">
               LastName:
               <input
                 type="text"
@@ -105,7 +100,8 @@ export default function SignUp() {
                 placeholder="country"
               />
             </label>
-            <br /> <br />
+          */}
+            <br />
             <label htmlFor="email">
               Email:
               <input
@@ -139,17 +135,29 @@ export default function SignUp() {
                     prev = e.target.value;
                   })
                 }
-                placeholder="retypepassword"
+                placeholder="retype password"
               />
             </label>
             <br /> <br />
-            <label htmlFor="accounttype">Choose your Account type</label> <br />
-            <input type="radio" id="admin" name="accounttype" value="admin" />
+            <label htmlFor="role">Choose your Account type</label> <br />
+            <input
+              type="radio"
+              {...register("role", { required: true })}
+              id="admin"
+              name="role"
+              value="admin"
+            />
             <label htmlFor="admin">Admin</label>
             <br />
-            <input type="radio" id="user" name="accounttype" value="user" />
+            <input
+              type="radio"
+              {...register("role", { required: true })}
+              id="user"
+              name="role"
+              value="user"
+            />
             <label htmlFor="user">User</label> <br /> <br />
-            <label htmlFor="avatar">
+            {/*    <label htmlFor="avatar">
               Choose a profile picture:
               <input
                 type="file"
@@ -158,6 +166,7 @@ export default function SignUp() {
                 accept="image/png, image/jpeg"
               />
             </label>
+          */}{" "}
             <br /> <br />
             <input
               className="rounded-s-none p-2 max-w-sm mx-auto border-none bg-yellow-200"

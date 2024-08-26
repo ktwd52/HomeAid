@@ -30,21 +30,33 @@ const AuthProvider = ({ children }) => {
 
   const signup = (data) => {
     axios
-      .post("https://homeaid-app-api.onrender.com/auth/signup", data)
+      .post("http://localhost:8080/auth/signup", data)
+      // .post("https://homeaid-app-api.onrender.com/auth/signup", data)
       .then((res) => {
         setUser(res.data.user);
         localStorage.setItem("token", res.data.token);
       })
       .catch(console.log);
+    console.log(data);
   };
 
+  const updateprofile = (data) => {
+    axios
+      // .post("https://homeaid-app-api.onrender.com//auth/myprofile", data)
+      .put("https://homeaid-app-api.onrender.com//auth/profile", data)
+      .then((res) => {
+        setUser(res.data.user);
+        // localStorage.setItem("token", res.data.token);
+      })
+      .catch(console.log);
+  };
   const logout = () => {
     setUser(null);
     localStorage.removeItem("token");
   };
-
+  updateprofile;
   useEffect(() => {
-    axios
+    /* axios
       .get("https://homeaid-app-api.onrender.com/auth/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -60,11 +72,13 @@ const AuthProvider = ({ children }) => {
       })
       .finally(() => {
         setLoading(false);
-      });
+      }); */
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, signup }}>
+    <AuthContext.Provider
+      value={{ user, loading, login, logout, signup, updateprofile }}
+    >
       {children}
     </AuthContext.Provider>
   );
