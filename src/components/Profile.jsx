@@ -4,190 +4,181 @@
 
 export default Profile; */
 import { useForm } from "react-hook-form";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthProvider";
-// import AuthProvider from "./context/AuthProvider";
-function Profile() {
-  const { user, login, signup, updateprofile } = useContext(AuthContext);
 
+const labels = [
+  {
+    label: "First Name",
+    id: "firstname",
+    type: "text",
+    placeholder: "First Name",
+  },
+  {
+    label: "Last Name",
+    id: "lastname",
+    type: "text",
+    placeholder: "Last Name",
+  },
+  {
+    label: "Language",
+    id: "language",
+    type: "text",
+    placeholder: "language",
+  },
+  {
+    label: "House number",
+    id: "house_number",
+    type: "text",
+    placeholder: "house_number",
+  },
+  {
+    label: "Road",
+    id: "road",
+    type: "text",
+    placeholder: "road",
+  },
+  {
+    label: "Phone",
+    id: "phone",
+    type: "tel",
+    placeholder: "phone",
+  },
+  {
+    label: "State",
+    id: "state",
+    type: "text",
+    placeholder: "state",
+  },
+  {
+    label: "City",
+    id: "city",
+    type: "text",
+    placeholder: "city",
+  },
+  {
+    label: "Postal Code",
+    id: "postcode",
+    type: "text",
+    placeholder: "Postal Code",
+  },
+  {
+    label: "Country",
+    id: "country",
+    type: "text",
+    placeholder: "country",
+  },
+  {
+    label: "Offering Help",
+    id: "isOfferingHelp",
+    type: "checkbox",
+    placeholder: "isOfferingHelp",
+  },
+  {
+    label: "Email",
+    id: "email",
+    type: "text",
+    placeholder: "email",
+    disabled: true,
+  },
+  {
+    label: "Username",
+    id: "username",
+    type: "text",
+    placeholder: "username",
+    disabled: true,
+  },
+];
+
+function Profile() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setconfirmPassword] = useState("");
-  // const onSubmit = (data) => login(data);
+  const {
+    user,
+    profile,
+    login,
+    signup,
+    setProfile,
+    getProfile,
+    updateprofile,
+  } = useContext(AuthContext);
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  useEffect(() => {
+    console.log("Profile changed", profile);
+  }, [profile]);
+
+  console.log("Render", profile);
+  const LabelField = ({
+    callback,
+    label,
+    id,
+    type,
+    placeholder,
+    disabled = false,
+    value,
+  }) => (
+    <label key={id} htmlFor={id}>
+      {label}:
+      <input
+        type={type}
+        id={id}
+        {...callback(id, { required: false })}
+        placeholder={placeholder}
+        disabled={disabled}
+        value={value}
+        /* onChange={(e) =>
+          setProfile((prev) => {
+            prev[id] = e.target.value;
+          })
+        } */
+      />
+      <br /> <br />
+    </label>
+  );
   const onSubmit = (data) => {
-    // console.log(data.password); // make API call
-    // console.log(data.retypepassword); // make API call// perform all neccassary validations
-    /* if (data.password !== data.retypepassword) {
-      alert("Passwords don't match");
-    } else {
-      console.log(data); // make API call
-      updateprofile(data);
-    } */ console.log(data); // make API call
+    console.log("onSubmit ", data); // make API call
     updateprofile(data);
   };
   return (
     <>
-      {/*       {user ? (
-        <Navigate to="/" />
-      ) : ( */}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="grid bg-orange-400 py-16 gap-y-4 px-8"
       >
-        <h1>Update your Account</h1> <br />
+        <h1>Hi {profile?.firstname}, please update your details.. </h1> <br />
         <fieldset>
           <legend>
             {/* Create your Account <br /> <br /> */}
             {/* Update your Account <br /> <br /> */}
-            <label htmlFor="firstName">
-              First Name:
-              <input
-                type="text"
-                {...register("firstName", { required: true })}
-                placeholder="firstName"
+            {labels.map((label) => (
+              <LabelField
+                label={label.label}
+                key={label.id}
+                callback={register}
+                id={label.id}
+                type={label.type}
+                placeholder={label.placeholder}
+                disabled={label.disabled}
+                value={profile[label.id] ? profile[label.id] : ""}
+                /*  onChange={(e) => {
+                  e.target.value;
+                }} */
+                // value={profile[label.id] ? profile[label.id] : ""}
               />
-              <br /> <br />
-            </label>
-            <label htmlFor="lastName">
-              Last Name:
-              <input
-                type="text"
-                {...register("lastName", { required: true })}
-                placeholder="last Name"
-              />
-            </label>{" "}
+            ))}
             <br /> <br />
-            <label htmlFor="language">
-              Language:
-              <input
-                type="text"
-                {...register("language", { required: true })}
-                placeholder="language"
-              />
-            </label>{" "}
-            <br /> <br />
-            <label htmlFor="house_number">
-              House number:
-              <input
-                type="text"
-                {...register("house_number", { required: true })}
-                placeholder="house_number"
-              />
-            </label>{" "}
-            <br /> <br />
-            <label htmlFor="road">
-              Road:
-              <input
-                type="text"
-                {...register("road", { required: true })}
-                placeholder="road"
-              />
-            </label>
-            <br /> <br />
-            <label htmlFor="phone">
-              Phone:
-              <input
-                type="tel"
-                {...register("phone", { required: true })}
-                placeholder="phone"
-              />
-            </label>
-            <br /> <br />
-            <div>
-              <label htmlFor="state">
-                state:
-                <input
-                  type="text"
-                  {...register("state", {})}
-                  placeholder="state"
-                />
-              </label>
-              <br /> <br />
-            </div>
-            {/*  <br />
-            <div>
-              <label htmlFor="address">
-                Address:
-                <input
-                  type="tel"
-                  {...register("address", { required: true })}
-                  placeholder="address"
-                />
-              </label>
-              <br /> <br />
-            </div> */}
-            <label htmlFor="city">
-              City:
-              <input
-                type="text"
-                {...register("city", { required: true })}
-                placeholder="city"
-              />
-            </label>
-            <br /> <br />
-            <label htmlFor="postalCode">
-              Postal Code:
-              <input
-                type="number"
-                {...register("postalCode", {})}
-                placeholder="postal Code"
-              />
-            </label>
-            <br /> <br />
-            <label htmlFor="country">
-              Country:
-              <input
-                type="text"
-                {...register("country", { required: true })}
-                placeholder="country"
-              />
-            </label>
-            <br /> <br />
-            <label htmlFor="isOfferingHelp">
-              Offering Help?
-              <input
-                type="text"
-                {...register("isOfferingHelp", { required: true })}
-                placeholder="isOffering Help"
-              />
-            </label>
-            <br /> <br />
-            <label htmlFor="email">
-              Email:
-              <input
-                type="email"
-                {...register("email", { required: true })}
-                placeholder="email"
-              />
-            </label>
-            <br /> <br />
-            <br /> <br />
-            {/* <label htmlFor="accounttype">Choose your Account type</label> <br />
-            <input type="radio" id="admin" name="accounttype" value="admin" />
-            <label htmlFor="admin">Admin</label>
-            <br />
-            <input type="radio" id="user" name="accounttype" value="user" />
-            <label htmlFor="user">User</label> <br /> <br />
-             */}
-            <label htmlFor="avatar">
-              Choose a profile picture:
-              <input
-                type="file"
-                id="profile"
-                name="profile"
-                accept="image/png, image/jpeg"
-              />
-            </label>
-            <br /> <br />
-            <input
+            <button
               className="rounded-s-none p-2 max-w-sm mx-auto border-none bg-yellow-200"
               type="submit"
-              value="Update"
-            />
+            >
+              Update
+            </button>
           </legend>
         </fieldset>
       </form>
