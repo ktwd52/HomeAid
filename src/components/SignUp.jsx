@@ -45,62 +45,6 @@ export default function SignUp() {
               />
               <br />
             </label>
-            {/*    <label htmlFor="lastName">
-              LastName:
-              <input
-                type="text"
-                {...register("lastName", { required: true })}
-                placeholder="lastName"
-              />
-            </label>
-            <br /> <br />
-            <label htmlFor="phone">
-              Phone:
-              <input
-                type="tel"
-                {...register("phone", { required: true })}
-                placeholder="phone"
-              />
-            </label>
-            <br /> <br />
-            <div>
-              <label htmlFor="address">
-                Address:
-                <input
-                  type="tel"
-                  {...register("address", { required: true })}
-                  placeholder="address"
-                />
-              </label>
-              <br /> <br />
-            </div>
-            <label htmlFor="city">
-              City:
-              <input
-                type="text"
-                {...register("city", { required: true })}
-                placeholder="city"
-              />
-            </label>
-            <br /> <br />
-            <label htmlFor="postalCode">
-              PostalCode:
-              <input
-                type="number"
-                {...register("postalCode", { required: true })}
-                placeholder="postalCode"
-              />
-            </label>
-            <br /> <br />
-            <label htmlFor="country">
-              Country:
-              <input
-                type="text"
-                {...register("country", { required: true })}
-                placeholder="country"
-              />
-            </label>
-          */}
             <br />
             <label htmlFor="email">
               Email:
