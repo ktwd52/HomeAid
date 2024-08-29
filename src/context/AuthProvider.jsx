@@ -14,21 +14,17 @@ const AuthProvider = ({ children }) => {
   console.log("AuthProvider", user, profile);
 
   const login = (data) => {
-    /*     console.log(data);
-    setUser(true);
-    console.log(user); */
-
     axios
       // .post("https://homeaid-app-api.onrender.com/auth/login", data)
       .post("http://localhost:8080/auth/login", data)
       .then((res) => {
         setUser(res.data.user);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("token", res.data.token);
       })
       .catch((err) => {
         localStorage.removeItem("token");
       });
-    // navigate("/user-dashboard");
   };
 
   const signup = (data) => {
@@ -38,9 +34,7 @@ const AuthProvider = ({ children }) => {
       .then((res) => {
         // TODO: Do not save User details,
         // communicate to the User to log in
-        navigate("/login"); /* 
-        setUser(res.data.user);
-        localStorage.setItem("token", res.data.token); */
+        navigate("/login");
       })
       .catch(console.log);
     console.log(data);
@@ -61,6 +55,20 @@ const AuthProvider = ({ children }) => {
       })
       .catch(console.log);
 
+  const postRequests = (data) => {
+    axios
+      .post("http://localhost:8080/requests", data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        //navigate("/app/user-dashboard");
+      })
+      .catch(console.log);
+    console.log(data);
+  };
+
   const updateprofile = (data) => {
     axios
       // .post("https://homeaid-app-api.onrender.com//auth/myprofile", data)
@@ -71,17 +79,23 @@ const AuthProvider = ({ children }) => {
       })
       .then((res) => {
         console.log("Update Profile : ", res.data);
-        // setProfile(profile);
       })
       .catch(console.log);
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem("user");
     localStorage.removeItem("token");
   };
+
   // updateprofile;
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setUser(user);
+    }
+
     /* axios
       .get("https://homeaid-app-api.onrender.com/auth/me", {
         headers: {
@@ -108,6 +122,7 @@ const AuthProvider = ({ children }) => {
         profile,
         setProfile,
         loading,
+        postRequests,
         login,
         logout,
         signup,

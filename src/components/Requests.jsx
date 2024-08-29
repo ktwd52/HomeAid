@@ -8,13 +8,13 @@ export default Requests; */
 };
 
 export default Login; */
-// import { useContext } from "react";
-//  import { AuthContext } from "../context/AuthProvider";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthProvider";
 // import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 export default function Requests() {
-  // const { user, login } = useContext(AuthContext);
+  const { user, postRequests } = useContext(AuthContext);
 
   const {
     register,
@@ -24,12 +24,9 @@ export default function Requests() {
 
   // const onSubmit = (data) => login(data);
   const onSubmit = (data) => {
-    /*     const fileInput = document.getElementById("image");
-    const file = fileInput.files[0];
-    if (file) {
-      const reader = new FileReader();
-      console.log({ ...data, image: reader.readAsDataURL(file) });
-    } */
+    const dataWithUserId = { ...data, rUserId: user._id };
+    console.log(dataWithUserId);
+    postRequests(dataWithUserId);
   };
   return (
     <>
@@ -48,7 +45,7 @@ export default function Requests() {
             Title / Category:
             <input
               type="text"
-              {...register("titleCategory", { required: true })}
+              {...register("rCategory", { required: true })}
               placeholder="titleCategory"
             />
           </label>
@@ -57,11 +54,21 @@ export default function Requests() {
             Request text:
             <input
               type="text"
-              {...register("requesttext", { required: true })}
+              {...register("rText", { required: true })}
               placeholder="Request text:"
               maxLength="88"
               size="44"
             />
+            {/* <select {...register("gender")}>
+              <option value="female">female</option>
+              <option value="male">male</option>
+              <option value="other">other</option>
+            </select> */}
+            {/* 
+            <textarea>
+              
+              {...register("rText") placeholder="Request text:"}
+            </textarea> */}
           </label>
           <br />
           <label htmlFor="date">
