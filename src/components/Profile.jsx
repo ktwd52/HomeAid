@@ -90,6 +90,38 @@ const labels = [
   },
 ];
 
+const LabelField = ({
+  callback,
+  label,
+  id,
+  type,
+  placeholder,
+  disabled = false,
+  value,
+  setProfile,
+}) => (
+  <label key={id} htmlFor={id}>
+    {label}:
+    <input
+      type={type}
+      id={id}
+      {...callback(id, { required: false })}
+      placeholder={placeholder}
+      disabled={disabled}
+      value={value}
+      onChange={(e) =>
+        setProfile((prev) => {
+          return {
+            ...prev,
+            [id]: e.target.value,
+          };
+        })
+      }
+    />
+    <br /> <br />
+  </label>
+);
+
 function Profile() {
   const {
     register,
@@ -114,33 +146,7 @@ function Profile() {
   }, [profile]);
 
   console.log("Render", profile);
-  const LabelField = ({
-    callback,
-    label,
-    id,
-    type,
-    placeholder,
-    disabled = false,
-    value,
-  }) => (
-    <label key={id} htmlFor={id}>
-      {label}:
-      <input
-        type={type}
-        id={id}
-        {...callback(id, { required: false })}
-        placeholder={placeholder}
-        disabled={disabled}
-        value={value}
-        /* onChange={(e) =>
-          setProfile((prev) => {
-            prev[id] = e.target.value;
-          })
-        } */
-      />
-      <br /> <br />
-    </label>
-  );
+
   const onSubmit = (data) => {
     console.log("onSubmit ", data); // make API call
     updateprofile(data);
@@ -151,7 +157,7 @@ function Profile() {
         onSubmit={handleSubmit(onSubmit)}
         className="grid bg-orange-400 py-16 gap-y-4 px-8"
       >
-        <h1>Hi {profile?.firstname}, please update your details.. </h1> <br />
+        <h1>Hi {profile?.username}, please update your details.. </h1> <br />
         <fieldset>
           <legend>
             {/* Create your Account <br /> <br /> */}
@@ -165,7 +171,8 @@ function Profile() {
                 type={label.type}
                 placeholder={label.placeholder}
                 disabled={label.disabled}
-                value={profile[label.id] ? profile[label.id] : ""}
+                value={profile?.[label.id] ? profile[label.id] : ""}
+                setProfile={setProfile}
                 /*  onChange={(e) => {
                   e.target.value;
                 }} */
