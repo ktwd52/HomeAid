@@ -10,9 +10,12 @@ import {
   TableRow,
   TableCell,
   Button,
+  Accordion,
+  AccordionItem,
 } from "@nextui-org/react";
 import { FaTrash, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import ModalRequestDetails from "./ModalRequestDetails";
 
 // Main App Component
 const DataTableRequest = () => {
@@ -83,16 +86,22 @@ const DataTableRequest = () => {
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
       <TableBody items={requests}>
+        {/* <Accordion> */}
         {(item) => (
           <TableRow key={item._id}>
             {(columnKey) => (
               <TableCell>
+                {/* <AccordionItem key={item._id} title={item._id}> */}
                 {columnKey === "rStatus" ? (
                   statusLabels[item[columnKey]] || "Unknown Status"
                 ) : columnKey === "rDate" ? (
                   formatDate(item[columnKey])
                 ) : columnKey === "offerCount" ? (
-                  item.offerId.length // Count the number of offers
+                  item.offerId.length === 0 ? (
+                    <ModalRequestDetails />
+                  ) : (
+                    "Offer"
+                  ) // Count the number of offers
                 ) : columnKey === "rImage" ? (
                   item.rImage.length > 0 ? ( // Count the number of Images
                     "Image available" // If there are images
@@ -120,10 +129,12 @@ const DataTableRequest = () => {
                 ) : (
                   item[columnKey]
                 )}
+                {/* </AccordionItem> */}
               </TableCell>
             )}
           </TableRow>
         )}
+        {/* </Accordion> */}
       </TableBody>
     </Table>
   );
