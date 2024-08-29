@@ -83,15 +83,17 @@ export default function SignUp() {
               />
             </label>
             <br /> <br />
-            <label htmlFor="role">Choose your Account type</label> <br />
+            <br />
+            {/* <label htmlFor="role">Choose your Account type</label> <br /> */}
             <input
-              type="radio"
-              {...register("role", { required: true })}
-              id="admin"
+              type="checkbox"
+              {...register("role")}
+              id="role"
               name="role"
               value="admin"
             />
-            <label htmlFor="admin">Admin</label>
+            <label htmlFor="role">SignUp as Admin</label>
+            {/* <label htmlFor="admin">Admin</label>
             <br />
             <input
               type="radio"
@@ -100,7 +102,8 @@ export default function SignUp() {
               name="role"
               value="user"
             />
-            <label htmlFor="user">User</label> <br /> <br />
+            <label htmlFor="user">User</label> */}{" "}
+            <br /> <br />
             {/*    <label htmlFor="avatar">
               Choose a profile picture:
               <input

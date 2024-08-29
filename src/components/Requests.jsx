@@ -43,32 +43,42 @@ export default function Requests() {
         <fieldset className="rounded-s-none p-28 max-w-sm mx-auto   grid border-none  bg-lime-200">
           <label htmlFor="titleCategory">
             Title / Category:
-            <input
+            {/* <input
               type="text"
               {...register("rCategory", { required: true })}
               placeholder="titleCategory"
-            />
+            /> */}
+            <select {...register("rCategory")}>
+              <option value="general">general</option>
+              <option value="Carpentor">Carpentor</option>
+              <option value="Cooking">Cooking</option>
+              <option value="Cleaning">Cleaning</option>
+            </select>
           </label>
           <br />
           <label htmlFor="requesttext">
             Request text:
-            <input
+            {/* <input
               type="text"
               {...register("rText", { required: true })}
               placeholder="Request text:"
               maxLength="88"
               size="44"
-            />
+            /> */}
             {/* <select {...register("gender")}>
               <option value="female">female</option>
               <option value="male">male</option>
               <option value="other">other</option>
             </select> */}
-            {/* 
-            <textarea>
-              
-              {...register("rText") placeholder="Request text:"}
-            </textarea> */}
+            <input
+              type="textarea"
+              {...register("rText", { required: true })}
+              placeholder="Request text:"
+              maxLength="88"
+              size="44"
+            />
+            {/*               <textarea>   
+              </textarea> */}
           </label>
           <br />
           <label htmlFor="date">
