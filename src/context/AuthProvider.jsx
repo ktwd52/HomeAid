@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ENVConfig from "../Utils/env.config";
 
 export const AuthContext = createContext();
 
@@ -15,8 +16,7 @@ const AuthProvider = ({ children }) => {
 
   const login = (data) => {
     axios
-      // .post("https://homeaid-app-api.onrender.com/auth/login", data)
-      .post("http://localhost:8080/auth/login", data)
+      .post(`${ENVConfig.API_ServerURL}/auth/login`, data)
       .then((res) => {
         setUser(res.data.user);
         localStorage.setItem("user", JSON.stringify(res.data.user));
@@ -29,8 +29,7 @@ const AuthProvider = ({ children }) => {
 
   const signup = (data) => {
     axios
-      .post("http://localhost:8080/auth/signup", data)
-      // .post("https://homeaid-app-api.onrender.com/auth/signup", data)
+      .post(`${ENVConfig.API_ServerURL}/auth/signup`, data)
       .then((res) => {
         // TODO: Do not save User details,
         // communicate to the User to log in
@@ -42,7 +41,7 @@ const AuthProvider = ({ children }) => {
 
   const getProfile = () =>
     axios
-      .get("http://localhost:8080/auth/profile", {
+      .get(`${ENVConfig.API_ServerURL}/auth/profile`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -57,7 +56,7 @@ const AuthProvider = ({ children }) => {
 
   const postRequests = (data) => {
     axios
-      .post("http://localhost:8080/requests", data, {
+      .post(`${ENVConfig.API_ServerURL}/requests`, data, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -71,22 +70,47 @@ const AuthProvider = ({ children }) => {
 
   const updateprofile = (data) => {
     axios
-      // .post("https://homeaid-app-api.onrender.com//auth/myprofile", data)
-      .put("http://localhost:8080/auth/profile", data, {
+      .put(`${ENVConfig.API_ServerURL}/auth/profile`, data, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
-      .then((res) => {
+      .then((resp) => {
+        // Handle the successful response here
         console.log("Update Profile : ", res.data);
       })
-      .catch(console.log);
+      .catch((error) => {
+        // Handle the error here
+        console.log(error);
+      });
   };
 
+  // logout set isLoggedin to false and delete token and user from IntStorage
+
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    axios
+      .post(
+        `${ENVConfig.API_ServerURL}/auth/logout`,
+        {},
+        {
+          // Empty object for data since no data is being sent
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          // Check if the response status is 200 (OK)
+          console.log("Logout successful");
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
+          setUser(null);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   // updateprofile;
@@ -97,7 +121,7 @@ const AuthProvider = ({ children }) => {
     }
 
     /* axios
-      .get("https://homeaid-app-api.onrender.com/auth/me", {
+      .get("https://homeaid-app-api.onrender.com/auth/profile", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
