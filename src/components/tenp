@@ -1,0 +1,36 @@
+<TableCell>
+  {columnKey === "rStatus" ? (
+    statusLabels[item[columnKey]] || "Unknown Status"
+  ) : columnKey === "rDate" ? (
+    formatDate(item[columnKey])
+  ) : columnKey === "offerCount" ? (
+    item.offerId.length > 0 ? (
+      <ModalRequestDetails
+        id={item._id}
+        offers={`${item.offerId.length} Offers`}
+        isDisabled={item.offerId.length === 0} // Disable button if no offers
+      />
+    ) : (
+      "No Offers"
+    )
+  ) : columnKey === "rImage" ? (
+    item.rImage && item.rImage.length > 0 ? ( 
+      "Image available" // If there are images
+    ) : (
+      "No image available" // If there are no images
+    )
+  ) : columnKey === "actions" ? (
+    <div style={{ display: "flex", gap: "10px" }}>
+      <Button
+        auto
+        icon={<FaTrash />}
+        color="error"
+        onClick={() => deleteMyOfferById(item._id)} // Ensure the function name is correct
+      >
+        Delete
+      </Button>
+    </div>
+  ) : (
+    item[columnKey]
+  )}
+</TableCell>

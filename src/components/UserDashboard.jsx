@@ -1,6 +1,6 @@
 import { Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
-import DataTableRequest from "./DataTableRequest";
-import DataTableOffers from "./DataTableOffers";
+import DataTableMyRequests from "./DataTableMyRequests";
+import DataTableAllRequestsOfferHelp from "./DataTableAllRequestsOfferHelp";
 
 const UserDashboard = () => {
   return (
@@ -10,14 +10,14 @@ const UserDashboard = () => {
           <Tab key="allopenrequests" title="My Pending Requests">
             <Card>
               <CardBody>
-                <DataTableRequest />
+                <DataTableMyRequests />
               </CardBody>
             </Card>
           </Tab>
           <Tab key="offers" title="Offer Help">
             <Card>
               <CardBody>
-                <DataTableOffers />
+                <DataTableAllRequestsOfferHelp />
               </CardBody>
             </Card>
           </Tab>

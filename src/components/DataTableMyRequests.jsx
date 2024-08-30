@@ -1,7 +1,7 @@
 import ENVConfig from "../Utils/env.config";
 import axios from "axios";
 import formatDate from "../Utils/formatDate";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Table,
   TableHeader,
@@ -15,23 +15,28 @@ import { FaTrash, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import ModalRequestDetails from "./ModalRequestDetails";
 import PleaseLogin from "./PleaseLogin";
+import { AuthContext } from "../context/AuthProvider";
 
 // Main App Component
 const DataTableRequest = () => {
   const [requests, setRequests] = useState([]);
   const [deleteRequest, setDeleteRequest] = useState(true);
   const [showLoginPage, setShowLoginPage] = useState(false); // to manage state when Axios fetch is having an error
+  const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const getRequests = async () => {
       try {
-        const res = await axios.get(`${ENVConfig.API_ServerURL}/requests`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const res = await axios.get(
+          `${ENVConfig.API_ServerURL}/requests?rUserId=${user._id}&rStatus=0`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         if (res.data) {
           // console.log(res.data);
           setRequests(res.data);
@@ -81,7 +86,7 @@ const DataTableRequest = () => {
     0: "Awaiting Offer",
     1: "Offer Received",
     5: "Offer Accepted",
-    3: "In Progress",
+    6: "In Progress",
     9: "Finished",
   };
 
@@ -89,7 +94,7 @@ const DataTableRequest = () => {
     { key: "rCategory", label: "REQUEST CATEGORY" },
     { key: "rText", label: "REQUEST TEXT" },
     { key: "rDate", label: "REQUEST DATE" },
-    { key: "rImage.Length()", label: "REQUEST IMAGE(ES)" },
+    { key: "rImage", label: "REQUEST IMAGE(ES)" },
     { key: "rStatus", label: "STATUS" },
     { key: "offerCount", label: "OFFER COUNT" },
     { key: "actions", label: "ACTIONS" }, // New column for action buttons
@@ -112,25 +117,22 @@ const DataTableRequest = () => {
             <TableRow key={item._id}>
               {(columnKey) => (
                 <TableCell>
-                  {/* <AccordionItem key={item._id} title={item._id}> */}
                   {columnKey === "rStatus" ? (
                     statusLabels[item[columnKey]] || "Unknown Status"
                   ) : columnKey === "rDate" ? (
                     formatDate(item[columnKey])
                   ) : columnKey === "offerCount" ? (
-                    item.offerId.length === 0 ? (
-                      <ModalRequestDetails
-                        offers={
-                          item.offerId.length > 0
-                            ? `${requests.offerId.length} Offers`
-                            : "No Offers"
-                        }
-                        isDisabled={item.offerId.length === 0} // Disable button if no offers
-                      />
-                    ) : (
-                      "-"
-                    ) // Count the number of offers
-                  ) : columnKey === "rImage" ? (
+                    //  item.offerId === 0 ? (
+                    <ModalRequestDetails
+                      id={item._id}
+                      setRequests={setRequests}
+                      // offer={`${item.offerId.length} Offers`}
+                      // isDisabled={item.offerId === 0} // Disable button if no offers
+                    />
+                  ) : // ) : (
+                  //   "No Offers" )
+                  // Count the number of offers
+                  columnKey === "rImage" ? (
                     item.rImage.length > 0 ? ( // Count the number of Images
                       "Image available" // If there are images
                     ) : (
