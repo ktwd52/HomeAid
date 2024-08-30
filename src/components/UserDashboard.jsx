@@ -1,12 +1,13 @@
 import { Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
 import DataTableRequest from "./DataTableRequest";
+import DataTableOffers from "./DataTableOffers";
 
 const UserDashboard = () => {
   return (
     <>
       <div className="flex w-full flex-col">
-        <Tabs disabledKeys={["music"]} aria-label="Disabled Options">
-          <Tab key="allopenrequests" title="My Open Requests">
+        <Tabs disabledKeys={["inactive"]} aria-label="Disabled Options">
+          <Tab key="allopenrequests" title="My Pending Requests">
             <Card>
               <CardBody>
                 <DataTableRequest />
@@ -16,19 +17,23 @@ const UserDashboard = () => {
           <Tab key="offers" title="Offer Help">
             <Card>
               <CardBody>
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur.
+                <DataTableOffers />
               </CardBody>
             </Card>
           </Tab>
-          <Tab key="myrequests" title="My Requests">
+          <Tab key="mytasks" title="My Tasklist">
             <Card>
-              <CardBody>
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum.
-              </CardBody>
+              <CardBody>My Requests</CardBody>
+            </Card>
+          </Tab>
+          <Tab key="metrics" title="Metrics ">
+            <Card>
+              <CardBody>Metrics Diagrams etc....</CardBody>
+            </Card>
+          </Tab>
+          <Tab key="inactive" title="Inactive TBD">
+            <Card>
+              <CardBody>...</CardBody>
             </Card>
           </Tab>
         </Tabs>

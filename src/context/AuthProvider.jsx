@@ -88,28 +88,30 @@ const AuthProvider = ({ children }) => {
   // logout set isLoggedin to false and delete token and user from IntStorage
 
   const logout = () => {
+    // Get the user ID from localStorage
+    const userId = localStorage.getItem("user._id");
+
+    // Create a body object to send in the request
+    const body = { _id: userId };
+
+    // Remove user and token from localStorage
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
+    // Send a logout request to the server
     axios
-      .post(
-        `${ENVConfig.API_ServerURL}/auth/logout`,
-        {},
-        {
-          // Empty object for data since no data is being sent
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
+      .post(`${ENVConfig.API_ServerURL}/auth/logout`, body)
       .then((res) => {
         if (res.status === 200) {
-          // Check if the response status is 200 (OK)
+          // If logout is successful, log the message and clear the user state
           console.log("Logout successful");
-          localStorage.removeItem("user");
-          localStorage.removeItem("token");
-          setUser(null);
+          setUser(null); // Assuming setUser is a state setter function
         }
       })
       .catch((error) => {
+        // Handle any errors that occur during the request
         console.log(error);
+        setUser(null);
       });
   };
 

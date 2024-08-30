@@ -4,16 +4,24 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Button,
   useDisclosure,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  Button,
 } from "@nextui-org/react";
 
-export default function ModalRequestDetails() {
+export default function ModalRequestDetails({ offers, isDisabled }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <>
-      <Button onPress={onOpen}>Open Modal</Button>
+      <Button onPress={onOpen} isDisabled={isDisabled}>
+        {offers}
+      </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
@@ -22,24 +30,20 @@ export default function ModalRequestDetails() {
                 Modal Title
               </ModalHeader>
               <ModalBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat
-                  consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex
-                  incididunt cillum quis. Velit duis sit officia eiusmod Lorem
-                  aliqua enim laboris do dolor eiusmod. Et mollit incididunt
-                  nisi consectetur esse laborum eiusmod pariatur proident Lorem
-                  eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
+                <Table aria-label="Example static collection table1">
+                  <TableHeader>
+                    <TableColumn>NAME</TableColumn>
+                    <TableColumn>ROLE</TableColumn>
+                    <TableColumn>STATUS</TableColumn>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow key="1">
+                      <TableCell>Tony Reichert</TableCell>
+                      <TableCell>CEO</TableCell>
+                      <TableCell>Active</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
