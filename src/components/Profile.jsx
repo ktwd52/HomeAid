@@ -7,6 +7,65 @@ import { useForm } from "react-hook-form";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthProvider";
 
+const groupAddressToObject = (formData) => {
+  const {
+    firstname,
+    lastname,
+    language,
+    phone,
+    house_number,
+    road,
+    city,
+    state,
+    country,
+    postcode,
+    isOfferingHelp,
+    email,
+    username,
+  } = formData;
+  return {
+    firstname,
+    lastname,
+    language,
+    phone,
+    postcode,
+    isOfferingHelp,
+    email,
+    username,
+    adressObj: {
+      house_number,
+      road,
+      city,
+      state,
+      country,
+    },
+  };
+};
+
+const ungroupAddressToFields = (profile) => {
+  const {
+    firstname,
+    lastname,
+    language,
+    phone,
+    adressObj,
+    isOfferingHelp,
+    email,
+    username,
+  } = profile;
+
+  return {
+    firstname,
+    lastname,
+    language,
+    phone,
+    ...(adressObj ? adressObj : {}),
+    isOfferingHelp,
+    email,
+    username,
+  };
+};
+
 const labels = [
   {
     label: "First Name",
@@ -27,46 +86,46 @@ const labels = [
     placeholder: "language",
   },
   {
-    label: "House number",
-    id: "adressObj.house_number",
-    type: "text",
-    placeholder: "house_number",
-  },
-  {
-    label: "Road",
-    id: "adressObj.road",
-    type: "text",
-    placeholder: "road",
-  },
-  {
     label: "Phone",
     id: "phone",
     type: "tel",
     placeholder: "phone",
   },
   {
+    label: "House number",
+    id: "house_number",
+    type: "text",
+    placeholder: "house_number",
+  },
+  {
+    label: "Road",
+    id: "road",
+    type: "text",
+    placeholder: "road",
+  },
+  {
     label: "State",
-    id: "adressObj.state",
+    id: "state",
     type: "text",
     placeholder: "state",
   },
   {
     label: "City",
-    id: "adressObj.city",
+    id: "city",
     type: "text",
     placeholder: "city",
   },
   {
-    label: "Postal Code",
-    id: "adressObj.postcode",
-    type: "text",
-    placeholder: "Postal Code",
-  },
-  {
     label: "Country",
-    id: "adressObj.country",
+    id: "country",
     type: "text",
     placeholder: "country",
+  },
+  {
+    label: "Postal Code",
+    id: "postcode",
+    type: "text",
+    placeholder: "Postal Code",
   },
   {
     label: "Offering Help",
@@ -98,7 +157,7 @@ const LabelField = ({
   placeholder,
   disabled = false,
   value,
-  setProfile,
+  setFormData,
 }) => (
   <label key={id} htmlFor={id}>
     {label}:
@@ -110,7 +169,7 @@ const LabelField = ({
       disabled={disabled}
       value={value}
       onChange={(e) =>
-        setProfile((prev) => {
+        setFormData((prev) => {
           return {
             ...prev,
             [id]: e.target.value,
@@ -123,6 +182,8 @@ const LabelField = ({
 );
 
 function Profile() {
+  const [formData, setFormData] = useState({});
+
   const {
     register,
     handleSubmit,
@@ -143,13 +204,16 @@ function Profile() {
 
   useEffect(() => {
     console.log("Profile changed", profile);
+    if (profile) {
+      setFormData(ungroupAddressToFields(profile));
+    }
   }, [profile]);
 
   console.log("Render", profile);
 
   const onSubmit = (data) => {
-    console.log("onSubmit ", data); // make API call
-    updateprofile(data);
+    console.log("onSubmit ", data);
+    updateprofile(groupAddressToObject(data));
   };
   return (
     <>
@@ -157,11 +221,9 @@ function Profile() {
         onSubmit={handleSubmit(onSubmit)}
         className="grid bg-orange-400 py-16 gap-y-4 px-8"
       >
-        <h1>Hi {profile?.username}, please update your details.. </h1> <br />
+        <h1>Hi {formData?.username}, please update your details.. </h1> <br />
         <fieldset>
           <legend>
-            {/* Create your Account <br /> <br /> */}
-            {/* Update your Account <br /> <br /> */}
             {labels.map((label) => (
               <LabelField
                 label={label.label}
@@ -171,12 +233,8 @@ function Profile() {
                 type={label.type}
                 placeholder={label.placeholder}
                 disabled={label.disabled}
-                value={profile?.[label.id] ? profile[label.id] : ""}
-                setProfile={setProfile}
-                /*  onChange={(e) => {
-                  e.target.value;
-                }} */
-                // value={profile[label.id] ? profile[label.id] : ""}
+                value={formData?.[label.id] ? formData[label.id] : ""}
+                setFormData={setFormData}
               />
             ))}
             <br /> <br />

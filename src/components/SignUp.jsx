@@ -87,12 +87,12 @@ export default function SignUp() {
             {/* <label htmlFor="role">Choose your Account type</label> <br /> */}
             <input
               type="checkbox"
-              {...register("role")}
-              id="role"
-              name="role"
-              value="admin"
+              {...register("isAdmin")}
+              id="isAdmin"
+              name="isAdmin"
+              // value="admin"
             />
-            <label htmlFor="role">SignUp as Admin</label>
+            <label htmlFor="isAdmin">SignUp as Admin</label>
             {/* <label htmlFor="admin">Admin</label>
             <br />
             <input
