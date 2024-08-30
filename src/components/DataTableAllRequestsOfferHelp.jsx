@@ -18,7 +18,7 @@ import PleaseLogin from "./PleaseLogin";
 import { AuthContext } from "../context/AuthProvider";
 
 // Main App Component
-const DataTableRequest = () => {
+const DataTableAllRequestsOfferHelp = () => {
   const [requests, setRequests] = useState([]);
   const [deleteRequest, setDeleteRequest] = useState(true);
   const [showLoginPage, setShowLoginPage] = useState(false); // to manage state when Axios fetch is having an error
@@ -30,7 +30,7 @@ const DataTableRequest = () => {
     const getRequests = async () => {
       try {
         const res = await axios.get(
-          `${ENVConfig.API_ServerURL}/requests?rStatus<3`,
+          `${ENVConfig.API_ServerURL}/requests&rStatus=0`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -123,7 +123,7 @@ const DataTableRequest = () => {
                     formatDate(item[columnKey])
                   ) : columnKey === "offerCount" ? (
                     //  item.offerId === 0 ? (
-                    <ModalRequestDetails
+                    <ModalOfferingHelp
                       id={item._id}
                       // offer={`${item.offerId.length} Offers`}
                       // isDisabled={item.offerId === 0} // Disable button if no offers
@@ -163,4 +163,4 @@ const DataTableRequest = () => {
   );
 };
 
-export default DataTableRequest;
+export default DataTableAllRequestsOfferHelp;
