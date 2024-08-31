@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import moment from "moment";
 
 export default function Requests() {
-  const { user, postRequests } = useContext(AuthContext);
+  const { user, postRequest } = useContext(AuthContext);
   const currentDate = moment().format("Y-MM-DD");
 
   const {
@@ -16,7 +16,7 @@ export default function Requests() {
   const onSubmit = (data) => {
     const dataWithUserId = { ...data, rUserId: user._id };
     console.log(dataWithUserId);
-    postRequests(dataWithUserId);
+    postRequest(dataWithUserId);
   };
   return (
     <>

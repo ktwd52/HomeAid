@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ENVConfig from "../Utils/env.config";
+import { toast } from "react-toastify";
 
 export const AuthContext = createContext();
 
@@ -31,6 +32,7 @@ const AuthProvider = ({ children }) => {
     axios
       .post(`${ENVConfig.API_ServerURL}/auth/signup`, data)
       .then((res) => {
+        toast.success("Sign up successful!");
         // TODO: Do not save User details,
         // communicate to the User to log in
         navigate("/login");
@@ -54,7 +56,7 @@ const AuthProvider = ({ children }) => {
       })
       .catch(console.log);
 
-  const postRequests = (data) => {
+  const postRequest = (data) => {
     axios
       .post(`${ENVConfig.API_ServerURL}/requests`, data, {
         headers: {
@@ -63,6 +65,7 @@ const AuthProvider = ({ children }) => {
       })
       .then((res) => {
         //navigate("/app/user-dashboard");
+        toast.success("Request sent!");
       })
       .catch(console.log);
     console.log(data);
@@ -151,7 +154,7 @@ const AuthProvider = ({ children }) => {
         profile,
         setProfile,
         loading,
-        postRequests,
+        postRequest,
         login,
         logout,
         signup,
