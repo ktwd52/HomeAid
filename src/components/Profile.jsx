@@ -1,8 +1,3 @@
-/* function Profile() {
-  return <>Profile</>;
-}
-
-export default Profile; */
 import { useForm } from "react-hook-form";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthProvider";
@@ -190,30 +185,25 @@ function Profile() {
     formState: { errors },
   } = useForm();
   const {
-    user,
     profile,
-    login,
-    signup,
-    setProfile,
     getProfile,
     updateprofile,
   } = useContext(AuthContext);
+
   useEffect(() => {
     getProfile();
   }, []);
 
   useEffect(() => {
-    console.log("Profile changed", profile);
     if (profile) {
       setFormData(ungroupAddressToFields(profile));
     }
   }, [profile]);
 
-  console.log("Render", profile);
+  console.log("Render - profile, formData", profile, formData);
 
-  const onSubmit = (data) => {
-    console.log("onSubmit ", data);
-    updateprofile(groupAddressToObject(data));
+  const onSubmit = () => {
+    updateprofile(groupAddressToObject(formData));
   };
   return (
     <>

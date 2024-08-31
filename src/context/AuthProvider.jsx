@@ -75,9 +75,12 @@ const AuthProvider = ({ children }) => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
-      .then((resp) => {
+      .then((res) => {
         // Handle the successful response here
-        console.log("Update Profile : ", res.data);
+        if (res.data) {
+          console.log("Update Profile : ", res.data);
+          setProfile(res.data)
+        }
       })
       .catch((error) => {
         // Handle the error here
@@ -89,10 +92,10 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     // Get the user ID from localStorage
-    const userId = localStorage.getItem("user._id");
+    const { _id } = JSON.parse(localStorage.getItem("user"));
 
     // Create a body object to send in the request
-    const body = { _id: userId };
+    const body = { _id };
 
     // Remove user and token from localStorage
     localStorage.removeItem("user");
