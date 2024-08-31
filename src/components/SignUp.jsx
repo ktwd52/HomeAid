@@ -25,75 +25,71 @@ export default function SignUp() {
   };
   return (
     <>
-      {/*       {user ? (
-        <Navigate to="/" />
-      ) : ( */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid bg-orange-400 py-16 gap-y-4 px-8"
+        className="flex flex-row justify-center bg-amber-50"
       >
-        <h1 className=" bg-orange-400 text-xl">Create your Account</h1>
-        <fieldset>
-          <legend>
-            <br />
-            <label htmlFor="username">
-              User Name:
-              <input
-                type="text"
-                {...register("username", { required: true })}
-                placeholder="userName"
-              />
-              <br />
-            </label>
-            <br />
-            <label htmlFor="email">
-              Email:
-              <input
-                type="email"
-                {...register("email", { required: true })}
-                placeholder="email"
-              />
-            </label>
-            <br /> <br />
-            <label htmlFor="password">
-              Password:
-              <input
-                type="password"
-                {...register("password", { required: true })}
-                onChange={(e) =>
-                  setPassword((prev) => {
-                    prev = e.target.value;
-                  })
-                }
-                placeholder="password"
-              />
-            </label>{" "}
-            <br /> <br />
-            <label htmlFor="retypepassword">
-              Retype Password:
-              <input
-                type="password"
-                {...register("retypepassword", { required: true })}
-                onChange={(e) =>
-                  setconfirmPassword((prev) => {
-                    prev = e.target.value;
-                  })
-                }
-                placeholder="retype password"
-              />
-            </label>
-            <br /> <br />
-            <br />
-            {/* <label htmlFor="role">Choose your Account type</label> <br /> */}
+        <div className="flex flex-col w-96 bg-amber-200 shadow-lg px-5 py-4 my-36">
+          <h3 className=" text-center py-6 text-lg">Create your Account</h3>
+          <label htmlFor="username" className="text-xs font-mono">Username</label>
+          <input
+            type="text"
+            {...register("username", { required: true })}
+            placeholder="Username"
+            className="p-2 mb-2 bg-amber-100"
+          />
+          <label htmlFor="email" className="text-xs font-mono">Email</label>
+          <input
+            type="text"
+            {...register("email", { required: true })}
+            placeholder="Email"
+            className="p-2 mb-2 bg-amber-100"
+          />
+          <label htmlFor="password" className="text-xs font-mono">Password</label>
+          <input
+            type="password"
+            {...register("password", { required: true })}
+            onChange={(e) =>
+              setPassword((prev) => {
+                prev = e.target.value;
+              })
+            }
+            placeholder="Password"
+            className="p-2 mb-2 bg-amber-100"
+          />
+          <label htmlFor="retypepassword" className="text-xs font-mono">Retype Password</label>
+          <input
+            type="password"
+            {...register("retypepassword", { required: true })}
+            onChange={(e) =>
+              setconfirmPassword((prev) => {
+                prev = e.target.value;
+              })
+            }
+            placeholder="Retype Password"
+            className="p-2 mb-2 bg-amber-100"
+          />
+          <div className="flex flex-row items-start py-3">
             <input
               type="checkbox"
               {...register("isAdmin")}
               id="isAdmin"
               name="isAdmin"
-              // value="admin"
+              className="bg-amber-100 mr-3"
             />
-            <label htmlFor="isAdmin">SignUp as Admin</label>
-            {/* <label htmlFor="admin">Admin</label>
+            <label htmlFor="isAdmin"  className="text-xs font-mono">SignUp as Admin</label>
+          </div>
+          <input
+            className="py-3 mt-4 mb-3 text-white bg-amber-600"
+            type="submit"
+            value="Sign up"
+          />
+        </div>
+      </form>
+    </>
+  );
+}
+{/* <label htmlFor="admin">Admin</label>
             <br />
             <input
               type="radio"
@@ -102,8 +98,7 @@ export default function SignUp() {
               name="role"
               value="user"
             />
-            <label htmlFor="user">User</label> */}{" "}
-            <br /> <br />
+            <label htmlFor="user">User</label> */}
             {/*    <label htmlFor="avatar">
               Choose a profile picture:
               <input
@@ -113,16 +108,4 @@ export default function SignUp() {
                 accept="image/png, image/jpeg"
               />
             </label>
-          */}{" "}
-            <br /> <br />
-            <input
-              className="rounded-s-none p-2 max-w-sm mx-auto border-none bg-yellow-200"
-              type="submit"
-              value="SignUp"
-            />
-          </legend>
-        </fieldset>
-      </form>
-    </>
-  );
-}
+          */}
