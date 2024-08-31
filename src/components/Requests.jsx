@@ -1,20 +1,11 @@
-/* const Requests = () => {
-  return <p> Add new request </p>;
-};
-
-export default Requests; */
-/* const Login = () => {
-  return <p> Login Page</p>;
-};
-
-export default Login; */
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
-// import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import moment from "moment";
 
 export default function Requests() {
   const { user, postRequests } = useContext(AuthContext);
+  const currentDate = moment().format("Y-MM-DD");
 
   const {
     register,
@@ -22,7 +13,6 @@ export default function Requests() {
     formState: { errors },
   } = useForm();
 
-  // const onSubmit = (data) => login(data);
   const onSubmit = (data) => {
     const dataWithUserId = { ...data, rUserId: user._id };
     console.log(dataWithUserId);
@@ -30,81 +20,53 @@ export default function Requests() {
   };
   return (
     <>
-      {/*       {user ? (
-        <Navigate to="/" />
-      ) : ( */}{" "}
-      <h1 className="flex bg-orange-400 py-16 gap-y-4 px-8">
-        Create your Requests
-      </h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex bg-orange-400 py-1 gap-y-4 px-1 grid-cols-3  justify-items-start"
+        className="flex flex-row justify-center bg-amber-50"
       >
-        <fieldset className="rounded-s-none p-28 max-w-sm mx-auto   grid border-none  bg-lime-200">
-          <label htmlFor="titleCategory">
-            Title / Category:
-            {/* <input
-              type="text"
-              {...register("rCategory", { required: true })}
-              placeholder="titleCategory"
-            /> */}
-            <select {...register("rCategory")}>
-              <option value="general">general</option>
-              <option value="Carpentor">Carpentor</option>
-              <option value="Cooking">Cooking</option>
-              <option value="Cleaning">Cleaning</option>
-            </select>
-          </label>
-          <br />
-          <label htmlFor="requesttext">
-            Request text:
-            {/* <input
-              type="text"
-              {...register("rText", { required: true })}
-              placeholder="Request text:"
-              maxLength="88"
-              size="44"
-            /> */}
-            {/* <select {...register("gender")}>
-              <option value="female">female</option>
-              <option value="male">male</option>
-              <option value="other">other</option>
-            </select> */}
-            <input
-              type="textarea"
-              {...register("rText", { required: true })}
-              placeholder="Request text:"
-              maxLength="88"
-              size="44"
-            />
-            {/*               <textarea>   
-              </textarea> */}
-          </label>
-          <br />
-          <label htmlFor="date">
-            Required deadline:
-            <input
-              type="date"
-              {...register("date", { required: true })}
-              placeholder="date"
-            />
-          </label>
-          <br />
-          <label htmlFor="avatar">Choose a Request picture:</label>
+        <div className="flex flex-col w-4/5 max-w-3xl bg-amber-200 shadow-lg px-5 py-4 mt-24 mb-36">
+          <h3 className="text-center py-6 text-lg">
+            Create your Request
+          </h3>
+          <label htmlFor="titleCategory" className="text-xs font-mono">Category</label>
+          <select {...register("rCategory")} className="p-2 mb-2 bg-amber-100 w-full sm:w-2/3 md:w-1/3">
+            <option value="general">General</option>
+            <option value="carpenter">Carpenter</option>
+            <option value="cooking">Cooking</option>
+            <option value="cleaning">Cleaning</option>
+            <option value="gardening">Gardening</option>
+            <option value="plumbing">Plumbing</option>
+          </select>
+          <label htmlFor="date" className="text-xs font-mono mt-2">Deadline</label>
+          <input
+            type="date"
+            {...register("date", { required: true })}
+            value={currentDate}
+            min={currentDate}
+            className="p-2 mb-2 bg-amber-100 w-full sm:w-2/3 md:w-1/3"
+          />
+          <label htmlFor="requesttext" className="text-xs font-mono mt-2">Description</label>
+          <textarea
+            {...register("rText", { required: true })}
+            placeholder="Request text"
+            className="p-2 mb-2 bg-amber-100"
+            rows="8"
+          />
+          <label htmlFor="avatar" className="text-xs font-mono mt-2">Choose a Request picture:</label>
           <input
             type="file"
             id="image"
             name="image"
             accept="image/png, image/jpeg"
+            className="p-2 mb-2 bg-amber-100"
           />
-        </fieldset>
-        <input
-          className="rounded-s-none p-2  mx-auto h-24  border-x-4 bg-yellow-200"
-          type="submit"
-          value="Send Request"
-        />
+          <input
+            type="submit"
+            value="Send Request"
+            className="py-3 mt-4 mb-3 self-center text-white bg-amber-600 w-full md:w-1/3"
+          />
+        </div>
       </form>
-      {/* )} */}
     </>
   );
 }
