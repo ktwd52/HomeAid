@@ -132,7 +132,7 @@ const UD_OfferHelp = () => {
                   ) : columnKey === "actions" ? (
                     <div style={{ display: "flex", gap: "10px" }}>
                       <Mod_OfferHelp
-                        id={item}
+                        id={item._id}
                         isDisabled={item.offerId ? true : false}
                       />
                       // Disable button if no offers

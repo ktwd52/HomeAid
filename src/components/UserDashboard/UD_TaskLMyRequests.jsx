@@ -133,7 +133,10 @@ const UD_TaskLMyRequests = () => {
                     />
                   ) : column.key === "actions" ? (
                     <div style={{ display: "flex", gap: "10px" }}>
-                      <Mod_CloseRequest />
+                      <Mod_CloseRequest
+                        id={item._id}
+                        setRequest={setRequests}
+                      />
                     </div>
                   ) : (
                     item[column.key]

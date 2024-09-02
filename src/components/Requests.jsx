@@ -1,22 +1,14 @@
-/* const Requests = () => {
-  return <p> Add new request </p>;
-};
-
-export default Requests; */
-/* const Login = () => {
-  return <p> Login Page</p>;
-};
-
-export default Login; */
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
-// import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Textarea } from "@nextui-org/input";
-import Form_ImageUpload from "./ImageUpload/Form_ImageUpload";
+import moment from "moment";
 
 export default function Requests() {
   const { user, postRequests } = useContext(AuthContext);
+  const StdRequestDate = new Date(new Date().setDate(new Date().getDate() + 7))
+    .toISOString()
+    .split("T")[0];
+  const minDate = new Date().toISOString().split("T")[0];
 
   const {
     register,
@@ -24,66 +16,68 @@ export default function Requests() {
     formState: { errors },
   } = useForm();
 
-  // const onSubmit = (data) => login(data);
   const onSubmit = (data) => {
     const dataWithUserId = { ...data, rUserId: user._id };
-    // Console log
     console.log(dataWithUserId);
     postRequests(dataWithUserId);
   };
-
   return (
     <>
-      <h1 className="flex bg-orange-400 py-16 gap-y-4 px-8">
-        Create your Requests
-      </h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex bg-orange-400 py-1 gap-y-4 px-1 grid-cols-3 justify-items-start"
+        className="flex flex-row justify-center bg-amber-50"
       >
-        <fieldset className="rounded-s-none p-28 max-w-sm mx-auto grid border-none bg-lime-200">
-          <label htmlFor="titleCategory">
-            Title / Category:
-            <select {...register("rCategory")}>
-              <option value="general">General</option>
-              <option value="Carpentor">Carpentor</option>
-              <option value="Cooking">Cooking</option>
-              <option value="Cleaning">Cleaning</option>
-            </select>
+        <div className="flex flex-col w-4/5 max-w-3xl bg-amber-200 shadow-lg px-5 py-4 mt-24 mb-36">
+          <h3 className="text-center py-6 text-lg">Create your Request</h3>
+          <label htmlFor="titleCategory" className="text-xs font-mono">
+            Category
           </label>
-          <br />
-          <Textarea
-            {...register("rText", { required: true })}
-            isRequired
-            maxRows={4}
-            label="Request description:"
-            labelPlacement="outside"
-            placeholder="Please enter your request..."
-            className="max-w-xs"
-          />
-          <br />
-          <label htmlFor="date">
-            Required deadline:
-            <input
-              type="date"
-              {...register("date", { required: true })}
-              defaultValue={
-                new Date(new Date().setDate(new Date().getDate() + 7))
-                  .toISOString()
-                  .split("T")[0]
-              }
-              min={new Date().toISOString().split("T")[0]} // Set minimum date to today
-              placeholder="date"
-            />
+          <select
+            {...register("rCategory")}
+            className="p-2 mb-2 bg-amber-100 w-full sm:w-2/3 md:w-1/3"
+          >
+            <option value="general">General</option>
+            <option value="carpenter">Carpenter</option>
+            <option value="cooking">Cooking</option>
+            <option value="cleaning">Cleaning</option>
+            <option value="gardening">Gardening</option>
+            <option value="plumbing">Plumbing</option>
+          </select>
+          <label htmlFor="date" className="text-xs font-mono mt-2">
+            Deadline
           </label>
-          <br />
-          <Form_ImageUpload /> {/* Added the ImageUploadForm component */}
           <input
-            className="rounded-s-none p-2 mx-auto h-24 border-x-4 bg-yellow-200"
+            type="date"
+            {...register("date", { required: true })}
+            value={StdRequestDate}
+            min={minDate} // Set minimum date to today
+            className="p-2 mb-2 bg-amber-100 w-full sm:w-2/3 md:w-1/3"
+          />
+          <label htmlFor="requesttext" className="text-xs font-mono mt-2">
+            Description
+          </label>
+          <textarea
+            {...register("rText", { required: true })}
+            placeholder="Request text"
+            className="p-2 mb-2 bg-amber-100"
+            rows="8"
+          />
+          <label htmlFor="avatar" className="text-xs font-mono mt-2">
+            Choose a Request picture:
+          </label>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            accept="image/png, image/jpeg"
+            className="p-2 mb-2 bg-amber-100"
+          />
+          <input
             type="submit"
             value="Send Request"
+            className="py-3 mt-4 mb-3 self-center text-white bg-amber-600 w-full md:w-1/3"
           />
-        </fieldset>
+        </div>
       </form>
     </>
   );

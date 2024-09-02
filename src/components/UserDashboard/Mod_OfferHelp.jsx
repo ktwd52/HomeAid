@@ -1,5 +1,6 @@
 import ENVConfig from "../../Utils/env.config"; // Adjust the import path to your actual configuration
 import { useState, useContext } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthProvider";
 import { today, getLocalTimeZone } from "@internationalized/date"; // Assuming you are using a date library
@@ -15,16 +16,22 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 
-export default function Mod_OfferHelp({ item, isDisabled }) {
+export default function Mod_OfferHelp({ id, isDisabled }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [offerDate, setOfferDate] = useState(today(getLocalTimeZone()));
   const [offerText, setOfferText] = useState("");
   const { user } = useContext(AuthContext);
 
+  // Toast Message setup
+  const showToast = (message, type = "error") => {
+    toast(message, { type });
+  };
+
   const sendOffer = async () => {
     if (!offerText) {
       return console.error("Offer Text is required");
     }
+    console.log("reqId: ", id);
 
     try {
       const res = await axios.post(
@@ -33,7 +40,7 @@ export default function Mod_OfferHelp({ item, isDisabled }) {
           oText: offerText,
           oDate: offerDate.toString(), // Ensure it's correctly formatted
           oUserId: user._id,
-          requestId: item.requestId,
+          requestId: id,
         },
         {
           headers: {
@@ -43,14 +50,16 @@ export default function Mod_OfferHelp({ item, isDisabled }) {
       );
 
       console.log("Offer Sent:", res.data);
-      onClose();
+      showToast("Offer Sent:", "success");
     } catch (error) {
+      showToast("Error sending offer:", error);
       console.error("Error sending offer:", error);
     }
   };
 
   return (
     <>
+      <ToastContainer />
       <Button onPress={onOpen} disabled={isDisabled}>
         Offer Help
       </Button>
@@ -94,7 +103,7 @@ export default function Mod_OfferHelp({ item, isDisabled }) {
                 </Button>
                 <Button
                   color="primary"
-                  onPress={() => sendOffer(onClose)} // Pass function reference
+                  onPress={() => sendOffer(onClose())} // Pass function reference
                 >
                   Send Offer
                 </Button>

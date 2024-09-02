@@ -207,7 +207,6 @@ function Profile() {
               />
             ))}
             <br /> <br />
-            <Mod_MyProfile />
             <button
               className="rounded-s-none p-2 max-w-sm mx-auto border-none bg-yellow-200"
               type="submit"

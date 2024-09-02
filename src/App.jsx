@@ -22,7 +22,8 @@ import Protected from "./components/Protected";
 import Contact from "./components/Contact"; */
 import AuthProvider from "./context/AuthProvider";
 import Navbar from "./components/Navbar";
-import Profile from "./components/Profile";
+import Profile from "./components/Profile_old";
+import Mod_MyProfile from "./components/MyProfile/Mod_MyProfile";
 
 const publicLinks = [
   { name: "Home", value: "/" },
@@ -34,6 +35,7 @@ const protectedLinks = [
   { name: "+ Add new request", value: "/app/requests" },
   { name: "User Dashboard", value: "/app/user-dashboard" },
   { name: "My Profile", value: "/app/my-profile" },
+  { name: "MyP-old", value: "/app/my-profile-old" },
 ];
 
 const PageLayout = ({ links, showLogout }) => {
@@ -83,7 +85,8 @@ function App() {
           <Route path="app" element={<Protected />}>
             <Route path="requests" element={<Requests />} />
             <Route path="user-dashboard" element={<UserDashboard />} />
-            <Route path="my-profile" element={<Profile />} />
+            <Route path="my-profile-old" element={<Profile />} />
+            <Route path="my-profile" element={<Mod_MyProfile />} />
           </Route>
         </Route>
       </>
