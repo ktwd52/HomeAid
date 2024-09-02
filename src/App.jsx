@@ -47,7 +47,7 @@ const PageLayout = ({ links, showLogout }) => {
     <div className="flex flex-col h-lvh">
       <AuthProvider>
         <Navbar links={links} showLogout={showLogout} />
-        <div className="flex-grow">
+        <div className="flex-grow bg-amber-50">
           <Outlet />
         </div>
       </AuthProvider>
