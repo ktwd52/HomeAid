@@ -107,11 +107,16 @@ const UD_TaskLMyRequests = () => {
     return <PleaseLogin />;
   }
 
-  return loading ? (
-    <Spinner />
-  ) : (
+  return (
     <div className="">
-      <Table aria-label="Expandable table with dynamic content" isHeaderSticky>
+      <Table
+        aria-label="Expandable table with dynamic content"
+        isHeaderSticky
+        color="primary"
+        selectionMode="single"
+        defaultSelectedKeys={["2"]}
+        isStriped
+      >
         <TableHeader className="">
           {columns.map((column) => (
             <TableColumn key={column.key}>{column.label}</TableColumn>
