@@ -25,6 +25,7 @@ const AuthProvider = ({ children }) => {
       })
       .catch((err) => {
         localStorage.removeItem("token");
+        toast.error("login failed!");
       });
   };
 
@@ -37,8 +38,10 @@ const AuthProvider = ({ children }) => {
         // communicate to the User to log in
         navigate("/login");
       })
-      .catch(console.log);
-
+      // .catch(console.log);
+      .catch((err) => {
+        toast.error("signup failed!");
+      });
     console.log(data);
   };
 
@@ -83,7 +86,7 @@ const AuthProvider = ({ children }) => {
         // Handle the successful response here
         if (res.data) {
           console.log("Update Profile : ", res.data);
-          setProfile(res.data)
+          setProfile(res.data);
         }
       })
       .catch((error) => {
