@@ -1,5 +1,6 @@
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import UD_MyRequests from "./UserDashboard/UD_MyRequests.jsx";
+import UD_MyRequests_nextUI from "./UserDashboard/UD_MyRequests_nextUI.jsx";
 import UD_OfferHelp from "./UserDashboard/UD_OfferHelp.jsx";
 import UD_TaskLMyOffers from "./UserDashboard/UD_TaskLMyOffers.jsx";
 import UD_TaskLMyRequests from "./UserDashboard/UD_TaskLMyRequests.jsx";
@@ -13,9 +14,9 @@ const UserDashboard = () => {
   return (
     <div className="l">
       <Tabs
-        disabledKeys={
-          user.isOfferingHelp ? ["offers", "inactive"] : ["inactive"]
-        }
+        // disabledKeys={
+        //   user.isOfferingHelp ? ["offers", "inactive"] : ["inactive"]
+        // }
         aria-label="Disabled Options"
       >
         <Tab key="allopenrequests" title="My Pending Requests">
@@ -26,34 +27,20 @@ const UserDashboard = () => {
           </Card>
         </Tab>
         <Tab key="offers" title="Offer Help">
-          <Card>
-            <CardBody>
-              <UD_OfferHelp />
-            </CardBody>
-          </Card>
+          <UD_OfferHelp />
         </Tab>
         <Tab key="mytasks" title="My Tasklist">
-          <Card>
-            <CardBody className="flex">
-              <UD_TaskLMyOffers />
-              <UD_TaskLMyRequests />
-            </CardBody>
-          </Card>
+          <UD_TaskLMyOffers />
+          <UD_TaskLMyRequests />
         </Tab>
         <Tab key="metrics" title="Metrics">
-          <Card>
-            <CardBody>Metrics Diagrams etc....</CardBody>
-          </Card>
+          <p>Metrics Diagrams etc....</p>
         </Tab>
         <Tab key="inactive" title="Inactive TBD">
-          <Card>
-            <CardBody>...</CardBody>
-          </Card>
+          <UD_MyRequests_nextUI />
         </Tab>
         <Tab key="1" title="UseCaseTable">
-          <Card>
-            <UseCaseTable />
-          </Card>
+          <UseCaseTable />
         </Tab>
       </Tabs>
     </div>
