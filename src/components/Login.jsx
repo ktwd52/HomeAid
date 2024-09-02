@@ -28,23 +28,33 @@ export default function Login() {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-row justify-center bg-amber-50"
         >
-          <div className="flex flex-col w-96 bg-amber-200 shadow-lg px-5 py-4 my-36">
-            <h3 className="text-center py-6 text-lg">Sign in to your account</h3>
-            <label htmlFor="email" className="text-xs font-mono">Email Address</label>
+          <div className="flex flex-col w-96 bg-amber-200 shadow-lg px-5 py-4 mx-2 my-36">
+            <h3 className="text-center py-6 text-lg">
+              Sign in to your account
+            </h3>
+            <label htmlFor="email" className="text-xs font-mono">
+              Email Address
+            </label>
             <input
               type="email"
               {...register("email", { required: true })}
               placeholder="Email"
               className="p-2 mb-2 bg-amber-100"
             />
-            <label htmlFor="email" className="text-xs font-mono">Password</label>
+            <label htmlFor="email" className="text-xs font-mono">
+              Password
+            </label>
             <input
               type="password"
               {...register("password", { required: true })}
               placeholder="Password"
               className="p-2 mb-2 bg-amber-100"
             />
-            <input type="submit" value="Login" className="py-3 mt-4 mb-3 text-white bg-amber-600" />
+            <input
+              type="submit"
+              value="Login"
+              className="py-3 mt-4 mb-3 text-white bg-amber-600"
+            />
           </div>
         </form>
       )}
