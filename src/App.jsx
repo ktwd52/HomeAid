@@ -18,8 +18,8 @@ import UserDashboard from "./components/UserDashboard";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Protected from "./components/Protected";
-/* import About from "./components/About";
-import Contact from "./components/Contact"; */
+import Footer from "./components/Footer";
+// import Contact from "./components/Contact";
 import AuthProvider from "./context/AuthProvider";
 import Navbar from "./components/Navbar";
 import Profile from "./components/Profile_old";
@@ -47,7 +47,8 @@ const PageLayout = ({ links, showLogout }) => {
         <Navbar links={links} showLogout={showLogout} />
         <Outlet />
       </AuthProvider>
-      <p className="bg-primary text-primary-content bg-yellow-200">Footer</p>
+      <Footer />
+      {/* <p className="bg-primary text-primary-content bg-yellow-200">Footer</p> */}
     </>
   );
 };
