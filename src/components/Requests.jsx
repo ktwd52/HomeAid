@@ -1,14 +1,11 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { useForm } from "react-hook-form";
-import moment from "moment";
+import formatDate from "../Utils/formatDate";
 
 export default function Requests() {
-  const { user, postRequests } = useContext(AuthContext);
-  const StdRequestDate = new Date(new Date().setDate(new Date().getDate() + 7))
-    .toISOString()
-    .split("T")[0];
-  const minDate = new Date().toISOString().split("T")[0];
+  const { user, postRequest } = useContext(AuthContext);
+  const currentDate = formatDate(new Date());
 
   const {
     register,
@@ -49,8 +46,7 @@ export default function Requests() {
           <input
             type="date"
             {...register("date", { required: true })}
-            value={StdRequestDate}
-            min={minDate} // Set minimum date to today
+            min={currentDate} // Set minimum date to today
             className="p-2 mb-2 bg-amber-100 w-full sm:w-2/3 md:w-1/3"
           />
           <label htmlFor="requesttext" className="text-xs font-mono mt-2">

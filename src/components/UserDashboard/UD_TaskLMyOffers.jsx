@@ -34,7 +34,7 @@ const UD_TaskLMyOffers = () => {
         const res = await axios.get(
           `${ENVConfig.API_ServerURL}/offers?oUserId=${user._id}`,
           {
-            params: { oStatus: { $gte: 0, $lte: 8 } },
+            params: { oStatus: { $gte: 5, $lte: 8 } },
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -42,6 +42,7 @@ const UD_TaskLMyOffers = () => {
         );
         if (res.data) {
           setOffers(res.data);
+          console.log(res.data);
         }
       } catch (error) {
         // Check if the error response exists and display the error message
@@ -73,6 +74,24 @@ const UD_TaskLMyOffers = () => {
     }
   };
 
+  const putInProgressById = async (id) => {
+    console.log("id: ", id);
+    try {
+      await axios.put(
+        `${ENVConfig.API_ServerURL}/offers/${id}`,
+        { oStatus: 7 },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setOffers(offers.filter((offers) => offers._id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const viewDetails = (id) => {
     navigate(`/offers-details/${id}`);
   };
@@ -81,17 +100,17 @@ const UD_TaskLMyOffers = () => {
     1: "Offer Sent",
     2: "Offer Rejected",
     3: "Offer Canceled",
+    4: "Offer Withdrawn",
     5: "Offer Accepted",
-    6: "Offer Withdrawn",
-    8: "In Progress",
+    7: "In Progress",
     9: "Offer finished",
   };
 
   const columns = [
-    { key: "oText", label: "OFFER TEXT" },
-    { key: "oDate", label: "OFFERED DATE" },
     { key: "oStatus", label: "STATUS" },
-    { key: "oUserId.username", label: "USERNAME" },
+    { key: "oText", label: "OFFER TEXT" },
+    { key: "oDate", label: "DEADLINE OFFERED" },
+    { key: "requestId.rUserId.username", label: "USERNAME REQUESTED" },
     { key: "actions", label: "ACTIONS" }, // New column for action buttons
   ];
   // If showLoginPage is true, render the PleaseLogin component
@@ -102,21 +121,21 @@ const UD_TaskLMyOffers = () => {
   return (
     <>
       <Table
-        isHeaderSticky="true"
+        isHeaderSticky
         color="primary"
         selectionMode="single"
         defaultSelectedKeys={["2"]}
         isStriped
         aria-label="HomeAid App Offer Table"
-        className="fixed"
+        className=""
       >
-        <TableHeader className="fixed" columns={columns}>
+        <TableHeader className="" columns={columns}>
           {(column) => (
             <TableColumn key={column.key}>{column.label}</TableColumn>
           )}
         </TableHeader>
         <TableBody
-          emptyContent={"No rows to display."}
+          emptyContent={"No Offered tasks to display."}
           items={offers}
           isLoading={isLoading}
           loadingContent={<Spinner label="Loading..." />}
@@ -149,10 +168,17 @@ const UD_TaskLMyOffers = () => {
                     ) : columnKey === "actions" ? (
                       <div style={{ display: "flex", gap: "10px" }}>
                         <Button
-                          isDisabled
+                          icon={<BsTrash3 />}
+                          color="alert"
+                          onClick={() => putInProgressById(item._id)}
+                        >
+                          In Progress
+                        </Button>
+                        <Button
+                          isDisabled="false"
                           icon={<BsTrash3 />}
                           color="error"
-                          onClick={() => deleteRequestById(item._id)}
+                          onClick={() => deleteMyOfferById(item._id)}
                         >
                           {item.rStatus < 5 ? "Cancel&Delete" : "Withdraw"}
                         </Button>

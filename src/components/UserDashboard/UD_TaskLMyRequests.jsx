@@ -110,14 +110,17 @@ const UD_TaskLMyRequests = () => {
   return loading ? (
     <Spinner />
   ) : (
-    <div className="relative h-64 overflow-y-auto">
-      <Table aria-label="Expandable table with dynamic content">
-        <TableHeader className="sticky top-0 bg-white z-10">
+    <div className="">
+      <Table aria-label="Expandable table with dynamic content" isHeaderSticky>
+        <TableHeader className="">
           {columns.map((column) => (
             <TableColumn key={column.key}>{column.label}</TableColumn>
           ))}
         </TableHeader>
-        <TableBody items={requests}>
+        <TableBody
+          items={requests}
+          emptyContent={"No Requests in progress to display."}
+        >
           {requests.map((item) => (
             <TableRow key={item._id}>
               {columns.map((column) => (

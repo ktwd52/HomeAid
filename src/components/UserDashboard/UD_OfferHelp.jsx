@@ -12,19 +12,18 @@ import {
   Spinner,
   Button,
 } from "@nextui-org/react";
-import { FaTrash, FaEye } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Mod_OfferHelp from "./Mod_OfferHelp";
 import PleaseLogin from "../PleaseLogin";
 import { AuthContext } from "../../context/AuthProvider";
 
-//Data Table for All Requests where rStatus < 2
+// Data Table for All Requests where rStatus < 2
 const UD_OfferHelp = () => {
   const [requests, setRequests] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [showLoginPage, setShowLoginPage] = useState(false); // to manage state when Axios fetch is having an error
   const { user } = useContext(AuthContext);
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,7 +49,7 @@ const UD_OfferHelp = () => {
         }
         setShowLoginPage(true); // Show the login page on error
       }
-      setLoading(false);
+      setIsLoading(false);
     };
 
     getRequests();
@@ -65,7 +64,6 @@ const UD_OfferHelp = () => {
       });
       setRequests(requests.filter((request) => request._id !== id));
     } catch (error) {
-      // Check if the error response exists and display the error message
       if (error.response) {
         console.error(
           `(${error.response.status}) ${error.response.data.error}`
@@ -90,70 +88,93 @@ const UD_OfferHelp = () => {
 
   const columns = [
     { key: "rStatus", label: "STATUS" },
-    { key: "rCategory", label: "REQUEST CATEGORY" },
+    { key: "rUserId.username", label: "USERNAME" },
+    { key: "rCategory", label: "CATEGORY" },
     { key: "rText", label: "REQUEST TEXT" },
-    { key: "rDate", label: "REQUEST DATE" },
-    { key: "rImage", label: "REQUEST IMAGE(ES)" },
-    { key: "offerCount", label: "PENDING OFFERS" },
-    { key: "actions", label: "OFFER HELP" }, // New column for action buttons
+    { key: "rDate", label: "REQ. DATE" },
+    { key: "rImage", label: "PICTURE(S)" },
+    { key: "offerCount", label: "# of OFFERS" },
+    { key: "actions", label: "OFFER HELP" },
   ];
-  // If showLoginPage is true, render the PleaseLogin component
 
+  // If showLoginPage is true, render the PleaseLogin component
   if (showLoginPage) {
     return <PleaseLogin />;
   }
-  return loading ? (
-    <Spinner />
-  ) : (
-    <div className="relative h-64 overflow-y-auto">
-      <Table className="" aria-label="Expandable table with dynamic content">
-        <TableHeader className="sticky top-0 bg-white z-10" columns={columns}>
-          {(column) => (
+
+  return (
+    <div className="">
+      <Table
+        isHeaderSticky
+        color="primary"
+        selectionMode="single"
+        defaultSelectedKeys={["2"]}
+        isStriped
+        className={{
+          wrapper: "max-h-[382px]",
+        }}
+        aria-label="Expandable table with dynamic content"
+      >
+        <TableHeader>
+          {columns.map((column) => (
             <TableColumn key={column.key}>{column.label}</TableColumn>
-          )}
+          ))}
         </TableHeader>
-        <TableBody items={requests}>
-          {(item) => (
+        <TableBody
+          items={requests}
+          emptyContent={"No Requests to display."}
+          isLoading={isLoading}
+          loadingContent={<Spinner label="Loading..." />}
+        >
+          {requests.map((item) => (
             <TableRow key={item._id}>
-              {(columnKey) => (
-                <TableCell>
-                  {columnKey === "rStatus" ? (
-                    statusLabels[item[columnKey]] || "Unknown Status"
-                  ) : columnKey === "rDate" ? (
-                    formatDate(item[columnKey])
-                  ) : columnKey === "offerCount" ? (
-                    item[columnKey] // Count the number of offers
-                  ) : columnKey === "rImage" ? (
-                    item.rImage.length > 0 ? ( // Count the number of Images
-                      "Image available" // If there are images
+              {columns.map((column) => (
+                <TableCell key={column.key}>
+                  {column.key === "rStatus" ? (
+                    <span
+                      style={{
+                        color:
+                          item[column.key] === 0
+                            ? "orange"
+                            : item[column.key] === 1
+                            ? "green"
+                            : "inherit",
+                      }}
+                    >
+                      {statusLabels[item[column.key]] || "Unknown Status"}
+                    </span>
+                  ) : column.key === "rDate" ? (
+                    formatDate(item[column.key])
+                  ) : column.key === "offerCount" ? (
+                    item[column.key]
+                  ) : column.key === "rImage" ? (
+                    item.rImage.length > 0 ? (
+                      "Image available"
                     ) : (
                       "No image available"
-                    ) // If there are no images
-                  ) : columnKey === "actions" ? (
+                    )
+                  ) : column.key === "actions" ? (
                     <div style={{ display: "flex", gap: "10px" }}>
                       <Mod_OfferHelp
                         id={item._id}
                         isDisabled={item.offerId ? true : false}
                       />
-                      // Disable button if no offers
                       <Button
                         auto
                         icon={<FaTrash />}
                         color="error"
-                        onClick={() =>
-                          deleteRequestById(item._id, setRequests())
-                        }
+                        onClick={() => deleteRequestById(item._id)}
                       >
                         Delete
                       </Button>
                     </div>
                   ) : (
-                    item[columnKey]
+                    item[column.key]
                   )}
                 </TableCell>
-              )}
+              ))}
             </TableRow>
-          )}
+          ))}
         </TableBody>
       </Table>
     </div>
