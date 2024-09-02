@@ -32,6 +32,7 @@ const publicLinks = [
 ];
 
 const protectedLinks = [
+  { name: "Home", value: "/app/" },
   { name: "+ Add new request", value: "/app/requests" },
   { name: "User Dashboard", value: "/app/user-dashboard" },
   { name: "My Profile", value: "/app/my-profile" },
@@ -48,7 +49,6 @@ const PageLayout = ({ links, showLogout }) => {
         <Outlet />
       </AuthProvider>
       <Footer />
-      {/* <p className="bg-primary text-primary-content bg-yellow-200">Footer</p> */}
     </>
   );
 };
@@ -84,9 +84,10 @@ function App() {
           element={<PageLayout links={protectedLinks} showLogout />}
         >
           <Route path="app" element={<Protected />}>
+            <Route index element={<Home />} />
             <Route path="requests" element={<Requests />} />
             <Route path="user-dashboard" element={<UserDashboard />} />
-            <Route path="my-profile-old" element={<Profile />} />
+            {/* <Route path="my-profile-old" element={<Profile />} /> */}
             <Route path="my-profile" element={<Mod_MyProfile />} />
           </Route>
         </Route>
