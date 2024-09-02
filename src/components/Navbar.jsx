@@ -1,10 +1,12 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, User} from "@nextui-org/react";
 
 const Navbar = ({ links, showLogout = false }) => {
   const { user, profile, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   console.log("Navbar", user);
   
   return (
@@ -30,7 +32,6 @@ const Navbar = ({ links, showLogout = false }) => {
           ))}
           {showLogout && (
             <div className="px-6 text-amber-600 font-bold hover:text-amber-800">
-              {/* <NavLink onClick={logout}>Logout</NavLink> */}
               <Dropdown placement="bottom-start">
                 <DropdownTrigger>
                   <User
@@ -45,7 +46,10 @@ const Navbar = ({ links, showLogout = false }) => {
                   />
                 </DropdownTrigger>
                 <DropdownMenu aria-label="User Actions" variant="flat">
-                  <DropdownItem key="logout" color="danger" onClick={logout}>
+                  <DropdownItem key="profile" className="h-14 gap-2" color="warning" onClick={() => navigate('/app/my-profile')}>
+                    <p className="">My Profile</p>
+                  </DropdownItem>
+                  <DropdownItem key="logout" color="warning" onClick={logout}>
                     Log Out
                   </DropdownItem>
                 </DropdownMenu>
