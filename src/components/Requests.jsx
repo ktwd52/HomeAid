@@ -19,7 +19,7 @@ export default function Requests() {
   const onSubmit = (data) => {
     const dataWithUserId = { ...data, rUserId: user._id };
     console.log(dataWithUserId);
-    postRequests(dataWithUserId);
+    postRequest(dataWithUserId);
   };
   return (
     <>

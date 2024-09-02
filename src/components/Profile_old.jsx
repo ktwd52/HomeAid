@@ -166,8 +166,17 @@ const LabelField = ({
 
 function Profile() {
   const [formData, setFormData] = useState({});
-  const { register, handleSubmit } = useForm();
-  const { profile, getProfile, updateprofile } = useContext(AuthContext);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const {
+    profile,
+    getProfile,
+    updateprofile,
+  } = useContext(AuthContext);
 
   useEffect(() => {
     getProfile();
@@ -179,8 +188,10 @@ function Profile() {
     }
   }, [profile]);
 
-  const onSubmit = (data) => {
-    updateprofile(groupAddressToObject(data));
+  console.log("Render - profile, formData", profile, formData);
+
+  const onSubmit = () => {
+    updateprofile(groupAddressToObject(formData));
   };
 
   return (

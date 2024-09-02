@@ -26,26 +26,26 @@ export default function Login() {
       ) : (
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="grid bg-orange-400 py-16 gap-y-4 px-8"
+          className="flex flex-row justify-center bg-amber-50"
         >
-          <h1>Login</h1>
-          <label htmlFor="email">
-            Email:
+          <div className="flex flex-col w-96 bg-amber-200 shadow-lg px-5 py-4 my-36">
+            <h3 className="text-center py-6 text-lg">Sign in to your account</h3>
+            <label htmlFor="email" className="text-xs font-mono">Email Address</label>
             <input
               type="email"
               {...register("email", { required: true })}
-              placeholder="email"
+              placeholder="Email"
+              className="p-2 mb-2 bg-amber-100"
             />
-          </label>
-          <label htmlFor="email">
-            Password:
+            <label htmlFor="email" className="text-xs font-mono">Password</label>
             <input
               type="password"
               {...register("password", { required: true })}
-              placeholder="password"
+              placeholder="Password"
+              className="p-2 mb-2 bg-amber-100"
             />
-          </label>
-          <input type="submit" value="Login" />
+            <input type="submit" value="Login" className="py-3 mt-4 mb-3 text-white bg-amber-600" />
+          </div>
         </form>
       )}
     </>

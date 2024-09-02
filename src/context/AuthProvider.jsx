@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ENVConfig from "../Utils/env.config";
+import { toast } from "react-toastify";
 
 export const AuthContext = createContext();
 
@@ -31,6 +32,7 @@ const AuthProvider = ({ children }) => {
     axios
       .post(`${ENVConfig.API_ServerURL}/auth/signup`, data)
       .then((res) => {
+        toast.success("Sign up successful!");
         // TODO: Do not save User details,
         // communicate to the User to log in
         navigate("/login");
@@ -55,7 +57,7 @@ const AuthProvider = ({ children }) => {
       })
       .catch(console.log);
 
-  const postRequests = (data) => {
+  const postRequest = (data) => {
     axios
       .post(`${ENVConfig.API_ServerURL}/requests`, data, {
         headers: {
@@ -64,6 +66,7 @@ const AuthProvider = ({ children }) => {
       })
       .then((res) => {
         //navigate("/app/user-dashboard");
+        toast.success("Request sent!");
       })
       .catch(console.log);
     console.log(data);
@@ -78,7 +81,10 @@ const AuthProvider = ({ children }) => {
       })
       .then((res) => {
         // Handle the successful response here
-        console.log("Update Profile : ", res.data);
+        if (res.data) {
+          console.log("Update Profile : ", res.data);
+          setProfile(res.data)
+        }
       })
       .catch((error) => {
         // Handle the error here
@@ -90,10 +96,10 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     // Get the user ID from localStorage
-    const userId = localStorage.getItem("user._id");
+    const { _id } = JSON.parse(localStorage.getItem("user"));
 
     // Create a body object to send in the request
-    const body = { _id: userId };
+    const body = { _id };
 
     // Remove user and token from localStorage
     localStorage.removeItem("user");
@@ -149,7 +155,7 @@ const AuthProvider = ({ children }) => {
         profile,
         setProfile,
         loading,
-        postRequests,
+        postRequest,
         login,
         logout,
         signup,
