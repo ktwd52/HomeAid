@@ -7,6 +7,8 @@ const Navbar = ({ links, showLogout = false }) => {
   const { user, profile, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const adminLink = { name: "Admin", value: "/app/admin" };
+
   console.log("Navbar", user);
   
   return (
@@ -30,6 +32,11 @@ const Navbar = ({ links, showLogout = false }) => {
               <NavLink to={link.value}>{link.name}</NavLink>
             </div>
           ))}
+          {user?.isAdmin && (
+            <div key={adminLink.value} className="px-6 text-amber-600 font-bold hover:text-amber-800">
+            <NavLink to={adminLink.value}>{adminLink.name}</NavLink>
+          </div>
+          )}
           {showLogout && (
             <div className="px-6 text-amber-600 font-bold hover:text-amber-800">
               <Dropdown placement="bottom-start">

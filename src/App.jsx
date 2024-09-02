@@ -24,6 +24,7 @@ import AuthProvider from "./context/AuthProvider";
 import Navbar from "./components/Navbar";
 import Profile from "./components/Profile_old";
 import Mod_MyProfile from "./components/MyProfile/Mod_MyProfile";
+import AdminDashboard from "./components/AdminDashboard";
 
 const publicLinks = [
   { name: "Home", value: "/" },
@@ -87,6 +88,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="requests" element={<Requests />} />
             <Route path="user-dashboard" element={<UserDashboard />} />
+            <Route path="admin" element={<AdminDashboard />} />
             {/* <Route path="my-profile-old" element={<Profile />} /> */}
             <Route path="my-profile" element={<Mod_MyProfile />} />
           </Route>
