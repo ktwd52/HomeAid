@@ -32,7 +32,7 @@ export default function Login() {
             <h3 className="text-center py-6 text-lg">Sign in to your account</h3>
             <label htmlFor="email" className="text-xs font-mono">Email Address</label>
             <input
-              type="text"
+              type="email"
               {...register("email", { required: true })}
               placeholder="Email"
               className="p-2 mb-2 bg-amber-100"

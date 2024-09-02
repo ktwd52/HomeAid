@@ -15,13 +15,13 @@ import {
 } from "@nextui-org/react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import ENVConfig from "../Utils/env.config";
-import formatDate from "../Utils/formatDate";
-import PleaseLogin from "./PleaseLogin";
+import ENVConfig from "../../Utils/env.config";
+import formatDate from "../../Utils/formatDate";
+import PleaseLogin from "../PleaseLogin";
 import { BsTrash3 } from "react-icons/bs"; // Assuming you want to use BsTrash3 from react-icons
-import ModalOfferFeedbackText from "./ModalOfferFeedbackText";
+import Mod_RejectFeedback from "./Mod_RejectFeedback";
 
-export default function ModalRequestDetails({ id, isDisabled, setRequests }) {
+export default function Mod_AccepRejectOffer({ id, isDisabled, setRequests }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [offers, setOffers] = useState([]);
   const [showLoginPage, setShowLoginPage] = useState(false);
@@ -120,7 +120,12 @@ export default function ModalRequestDetails({ id, isDisabled, setRequests }) {
       <Button onPress={onOpen} isDisabled={isDisabled}>
         {offers.length ? offers.length : 0}
       </Button>
-      <Modal size="5xl" isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal
+        size="5xl"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        orientation="center"
+      >
         <ModalContent>
           {(onClose) => (
             <>
@@ -147,7 +152,7 @@ export default function ModalRequestDetails({ id, isDisabled, setRequests }) {
                               ) : columnKey === "oDate" ? (
                                 formatDate(item[columnKey])
                               ) : columnKey === "oUserId.username" ? (
-                                item.oUserId.username
+                                item[columnKey]
                               ) : columnKey === "actions" ? (
                                 <div style={{ display: "flex", gap: "10px" }}>
                                   <Button
@@ -157,7 +162,10 @@ export default function ModalRequestDetails({ id, isDisabled, setRequests }) {
                                   >
                                     &#9989; {/* Accepting */}
                                   </Button>
-                                  <ModalOfferFeedbackText id={item._id} />
+                                  <Mod_RejectFeedback
+                                    id={item._id}
+                                    setOffers={setOffers}
+                                  />
                                 </div>
                               ) : (
                                 item[columnKey]

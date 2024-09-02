@@ -38,6 +38,7 @@ const AuthProvider = ({ children }) => {
         navigate("/login");
       })
       .catch(console.log);
+
     console.log(data);
   };
 

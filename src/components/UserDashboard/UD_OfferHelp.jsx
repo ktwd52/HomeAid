@@ -1,6 +1,6 @@
-import ENVConfig from "../Utils/env.config";
+import ENVConfig from "../../Utils/env.config";
 import axios from "axios";
-import formatDate from "../Utils/formatDate";
+import formatDate from "../../Utils/formatDate";
 import React, { useEffect, useState, useContext } from "react";
 import {
   Table,
@@ -9,18 +9,19 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Spinner,
   Button,
 } from "@nextui-org/react";
 import { FaTrash, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import ModalRequestDetails from "./ModalRequestDetails";
-import PleaseLogin from "./PleaseLogin";
-import { AuthContext } from "../context/AuthProvider";
+import Mod_OfferHelp from "./Mod_OfferHelp";
+import PleaseLogin from "../PleaseLogin";
+import { AuthContext } from "../../context/AuthProvider";
 
-// Main App Component
-const DataTableRequest = () => {
+//Data Table for All Requests where rStatus < 2
+const UD_OfferHelp = () => {
   const [requests, setRequests] = useState([]);
-  const [deleteRequest, setDeleteRequest] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [showLoginPage, setShowLoginPage] = useState(false); // to manage state when Axios fetch is having an error
   const { user } = useContext(AuthContext);
 
@@ -29,20 +30,17 @@ const DataTableRequest = () => {
   useEffect(() => {
     const getRequests = async () => {
       try {
-        const res = await axios.get(
-          `${ENVConfig.API_ServerURL}/requests?rUserId=${user._id}&rStatus=0`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        const res = await axios.get(`${ENVConfig.API_ServerURL}/requests`, {
+          params: { rStatus: { $lt: 5 } },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
         if (res.data) {
-          // console.log(res.data);
           setRequests(res.data);
         }
       } catch (error) {
-        // Check if the error response exists and display the error message
         if (error.response) {
           console.error(
             `(${error.response.status}) ${error.response.data.error}`
@@ -52,6 +50,7 @@ const DataTableRequest = () => {
         }
         setShowLoginPage(true); // Show the login page on error
       }
+      setLoading(false);
     };
 
     getRequests();
@@ -65,7 +64,6 @@ const DataTableRequest = () => {
         },
       });
       setRequests(requests.filter((request) => request._id !== id));
-      console.log(res);
     } catch (error) {
       // Check if the error response exists and display the error message
       if (error.response) {
@@ -91,19 +89,22 @@ const DataTableRequest = () => {
   };
 
   const columns = [
+    { key: "rStatus", label: "STATUS" },
     { key: "rCategory", label: "REQUEST CATEGORY" },
     { key: "rText", label: "REQUEST TEXT" },
     { key: "rDate", label: "REQUEST DATE" },
     { key: "rImage", label: "REQUEST IMAGE(ES)" },
-    { key: "rStatus", label: "STATUS" },
-    { key: "offerCount", label: "OFFER COUNT" },
-    { key: "actions", label: "ACTIONS" }, // New column for action buttons
+    { key: "offerCount", label: "PENDING OFFERS" },
+    { key: "actions", label: "OFFER HELP" }, // New column for action buttons
   ];
   // If showLoginPage is true, render the PleaseLogin component
+
   if (showLoginPage) {
     return <PleaseLogin />;
   }
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <div className="relative h-64 overflow-y-auto">
       <Table className="" aria-label="Expandable table with dynamic content">
         <TableHeader className="sticky top-0 bg-white z-10" columns={columns}>
@@ -112,7 +113,6 @@ const DataTableRequest = () => {
           )}
         </TableHeader>
         <TableBody items={requests}>
-          {/* <Accordion> */}
           {(item) => (
             <TableRow key={item._id}>
               {(columnKey) => (
@@ -122,17 +122,8 @@ const DataTableRequest = () => {
                   ) : columnKey === "rDate" ? (
                     formatDate(item[columnKey])
                   ) : columnKey === "offerCount" ? (
-                    //  item.offerId === 0 ? (
-                    <ModalRequestDetails
-                      id={item._id}
-                      setRequests={setRequests}
-                      // offer={`${item.offerId.length} Offers`}
-                      // isDisabled={item.offerId === 0} // Disable button if no offers
-                    />
-                  ) : // ) : (
-                  //   "No Offers" )
-                  // Count the number of offers
-                  columnKey === "rImage" ? (
+                    item[columnKey] // Count the number of offers
+                  ) : columnKey === "rImage" ? (
                     item.rImage.length > 0 ? ( // Count the number of Images
                       "Image available" // If there are images
                     ) : (
@@ -140,11 +131,18 @@ const DataTableRequest = () => {
                     ) // If there are no images
                   ) : columnKey === "actions" ? (
                     <div style={{ display: "flex", gap: "10px" }}>
+                      <Mod_OfferHelp
+                        id={item._id}
+                        isDisabled={item.offerId ? true : false}
+                      />
+                      // Disable button if no offers
                       <Button
                         auto
                         icon={<FaTrash />}
                         color="error"
-                        onClick={() => deleteRequestById(item._id)}
+                        onClick={() =>
+                          deleteRequestById(item._id, setRequests())
+                        }
                       >
                         Delete
                       </Button>
@@ -152,16 +150,14 @@ const DataTableRequest = () => {
                   ) : (
                     item[columnKey]
                   )}
-                  {/* </AccordionItem> */}
                 </TableCell>
               )}
             </TableRow>
           )}
-          {/* </Accordion> */}
         </TableBody>
       </Table>
     </div>
   );
 };
 
-export default DataTableRequest;
+export default UD_OfferHelp;

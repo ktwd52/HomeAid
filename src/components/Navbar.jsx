@@ -5,7 +5,7 @@ import { AuthContext } from "../context/AuthProvider";
 const Navbar = ({ links, showLogout = false }) => {
   const { logout } = useContext(AuthContext);
   return (
-    <nav className="bg-primary text-primary-content bg-yellow-200">
+    <nav className="text-primary-content bg-yellow-200">
       {/* <div className="mx-auto flex justify-between items-center flex flex justify-between">  */}
       <div className="max-w-[60rem] m-auto flex justify-around items-center py-2 ">
         {links.map((link) => (

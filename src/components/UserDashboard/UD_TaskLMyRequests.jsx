@@ -1,6 +1,6 @@
-import ENVConfig from "../Utils/env.config";
+import ENVConfig from "../../Utils/env.config";
 import axios from "axios";
-import formatDate from "../Utils/formatDate";
+import formatDate from "../../Utils/formatDate";
 import React, { useEffect, useState, useContext } from "react";
 import {
   Table,
@@ -9,18 +9,20 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Spinner,
   Button,
 } from "@nextui-org/react";
 import { FaTrash, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import ModalRequestDetails from "./ModalRequestDetails";
-import PleaseLogin from "./PleaseLogin";
-import { AuthContext } from "../context/AuthProvider";
+import Mod_CloseRequest from "./Mod_CloseRequest";
+import Mod_RequestDetails from "./Mod_RequestDetails.jsx";
+import PleaseLogin from "../PleaseLogin";
+import { AuthContext } from "../../context/AuthProvider";
 
-// Main App Component
-const DataTableAllRequestsOfferHelp = () => {
+//Data Table for logged in user Requests where rStatus < 2
+const UD_TaskLMyRequests = () => {
   const [requests, setRequests] = useState([]);
-  const [deleteRequest, setDeleteRequest] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [showLoginPage, setShowLoginPage] = useState(false); // to manage state when Axios fetch is having an error
   const { user } = useContext(AuthContext);
 
@@ -30,8 +32,9 @@ const DataTableAllRequestsOfferHelp = () => {
     const getRequests = async () => {
       try {
         const res = await axios.get(
-          `${ENVConfig.API_ServerURL}/requests&rStatus=0`,
+          `${ENVConfig.API_ServerURL}/requests?rUserId=${user._id}`,
           {
+            params: { rStatus: { $gte: 6, $lte: 8 } },
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -52,6 +55,7 @@ const DataTableAllRequestsOfferHelp = () => {
         }
         setShowLoginPage(true); // Show the login page on error
       }
+      setLoading(false);
     };
 
     getRequests();
@@ -65,7 +69,6 @@ const DataTableAllRequestsOfferHelp = () => {
         },
       });
       setRequests(requests.filter((request) => request._id !== id));
-      console.log(res);
     } catch (error) {
       // Check if the error response exists and display the error message
       if (error.response) {
@@ -85,82 +88,67 @@ const DataTableAllRequestsOfferHelp = () => {
   const statusLabels = {
     0: "Awaiting Offer",
     1: "Offer Received",
-    3: "Offer Accepted",
-    5: "In Progress",
+    5: "Offer Accepted",
+    6: "In Progress",
     9: "Finished",
   };
 
   const columns = [
+    { key: "rStatus", label: "STATUS" },
     { key: "rCategory", label: "REQUEST CATEGORY" },
     { key: "rText", label: "REQUEST TEXT" },
+    { key: "oText", label: "REQUEST TEXT" },
     { key: "rDate", label: "REQUEST DATE" },
-    { key: "rImage", label: "REQUEST IMAGE(ES)" },
-    { key: "rStatus", label: "STATUS" },
-    { key: "offerCount", label: "OFFER COUNT" },
-    { key: "actions", label: "ACTIONS" }, // New column for action buttons
+    { key: "oDate", label: "REQUEST DATE" },
+    { key: "actions", label: "CLOSE REQUEST" }, // New column for action buttons
   ];
   // If showLoginPage is true, render the PleaseLogin component
   if (showLoginPage) {
     return <PleaseLogin />;
   }
-  return (
+
+  return loading ? (
+    <Spinner />
+  ) : (
     <div className="relative h-64 overflow-y-auto">
-      <Table className="" aria-label="Expandable table with dynamic content">
-        <TableHeader className="sticky top-0 bg-white z-10" columns={columns}>
-          {(column) => (
+      <Table aria-label="Expandable table with dynamic content">
+        <TableHeader className="sticky top-0 bg-white z-10">
+          {columns.map((column) => (
             <TableColumn key={column.key}>{column.label}</TableColumn>
-          )}
+          ))}
         </TableHeader>
         <TableBody items={requests}>
-          {/* <Accordion> */}
-          {(item) => (
+          {requests.map((item) => (
             <TableRow key={item._id}>
-              {(columnKey) => (
-                <TableCell>
-                  {columnKey === "rStatus" ? (
-                    statusLabels[item[columnKey]] || "Unknown Status"
-                  ) : columnKey === "rDate" ? (
-                    formatDate(item[columnKey])
-                  ) : columnKey === "offerCount" ? (
-                    //  item.offerId === 0 ? (
-                    <ModalOfferingHelp
+              {columns.map((column) => (
+                <TableCell key={column.key}>
+                  {column.key === "rStatus" ? (
+                    statusLabels[item[column.key]] || "Unknown Status"
+                  ) : column.key === "rDate" ? (
+                    formatDate(item[column.key])
+                  ) : column.key === "offerCount" ? (
+                    <Mod_RequestDetails
                       id={item._id}
-                      // offer={`${item.offerId.length} Offers`}
-                      // isDisabled={item.offerId === 0} // Disable button if no offers
+                      setRequests={setRequests}
                     />
-                  ) : // ) : (
-                  //   "No Offers" )
-                  // Count the number of offers
-                  columnKey === "rImage" ? (
-                    item.rImage.length > 0 ? ( // Count the number of Images
-                      "Image available" // If there are images
-                    ) : (
-                      "No image available"
-                    ) // If there are no images
-                  ) : columnKey === "actions" ? (
+                  ) : column.key === "actions" ? (
                     <div style={{ display: "flex", gap: "10px" }}>
-                      <Button
-                        auto
-                        icon={<FaTrash />}
-                        color="error"
-                        onClick={() => deleteRequestById(item._id)}
-                      >
-                        Delete
-                      </Button>
+                      <Mod_CloseRequest
+                        id={item._id}
+                        setRequest={setRequests}
+                      />
                     </div>
                   ) : (
-                    item[columnKey]
+                    item[column.key]
                   )}
-                  {/* </AccordionItem> */}
                 </TableCell>
-              )}
+              ))}
             </TableRow>
-          )}
-          {/* </Accordion> */}
+          ))}
         </TableBody>
       </Table>
     </div>
   );
 };
 
-export default DataTableAllRequestsOfferHelp;
+export default UD_TaskLMyRequests;
