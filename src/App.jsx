@@ -44,13 +44,15 @@ const PageLayout = ({ links, showLogout }) => {
   const navigate = useNavigate();
 
   return (
-    <>
+    <div className="flex flex-col h-lvh">
       <AuthProvider>
         <Navbar links={links} showLogout={showLogout} />
-        <Outlet />
+        <div className="flex-grow">
+          <Outlet />
+        </div>
       </AuthProvider>
       <Footer />
-    </>
+    </div>
   );
 };
 
