@@ -35,7 +35,7 @@ const protectedLinks = [
   { name: "+ Add new request", value: "/app/requests" },
   { name: "User Dashboard", value: "/app/user-dashboard" },
   { name: "My Profile", value: "/app/my-profile" },
-  { name: "MyP-old", value: "/app/my-profile-old" },
+  // { name: "MyP-old", value: "/app/my-profile-old" },
 ];
 
 const PageLayout = ({ links, showLogout }) => {
