@@ -14,11 +14,11 @@ const Navbar = ({ links, showLogout = false }) => {
   return (
     <nav className="text-primary-content bg-yellow-200">
       {/* <div className="max-w-[60rem] m-auto flex justify-between items-center flex flex justify-between">  */}
-      <div className=" items-center flex justify-between py-2 ">
+      <div className=" items-center flex justify-between">
         <div className="flex flex-row items-center px-8">
           <img
             className="mr-8"
-            src="\img\HomeAid-logo2.JPG"
+            src="\img\HomeAid-Logo.JPG"
             alt="The head and torso of a dinosaur skeleton;
           it has a large head with long sharp teeth"
             width="100"

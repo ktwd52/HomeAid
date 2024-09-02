@@ -12,7 +12,7 @@ const UserDashboard = () => {
   const { user } = useContext(AuthContext); // Move useContext inside the component
 
   return (
-    <div className="bg-gradient-to-b bg-gradient-to-r from-gray-100 to-gray-300">
+    <div className="pt-4">
       <Tabs
         // disabledKeys={
         //   user.isOfferingHelp ? ["offers", "inactive"] : ["inactive"]
