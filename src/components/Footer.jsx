@@ -3,8 +3,13 @@ import React from "react";
 export default function Footer() {
   return (
     <footer className="bg-neutral-200 text-center text-white dark:bg-neutral-600">
-      <div className="container pt-9">
-        <div className="mb-9 flex justify-center">
+      <div className="flex flex-row flex-wrap justify-between bg-primary text-primary-content bg-yellow-200 p-4 text-center text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200">
+        {/* <!--Copyright section--> */}
+        <div className="">
+          © 2024 HomeAid
+        </div>
+        {/* <!-- Links section--> */}
+        <div className="flex items-baseline">
           <a className="mr-9 text-neutral-800 dark:text-neutral-200">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -70,17 +75,6 @@ export default function Footer() {
             </svg>
           </a>
         </div>
-      </div>
-
-      {/* <!--Copyright section--> */}
-      <div className="bg-primary text-primary-content bg-yellow-200 p-4 text-center text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200">
-        © 2024 Copyright:
-        <a
-          className="text-neutral-800 dark:text-neutral-400"
-          href="https://tw-elements.com/"
-        >
-          HomeAid
-        </a>
       </div>
     </footer>
   );
