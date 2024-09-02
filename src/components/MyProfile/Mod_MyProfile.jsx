@@ -31,10 +31,10 @@ export default function ModalGetGeoData() {
     firstname: user.firstname || "",
     lastname: user.lastname || "",
     phone: user.phone || "",
-    maxDistance: user.maxDistance || 5,
     updatedBy: user.username || undefined,
     username: user.username || "", // readonly
     email: user.email || "", // readonly
+    maxDistance: user.maxDistance || 5,
   });
 
   const [geoCoordinates, setGeoCoordinates] = useState({
@@ -243,7 +243,7 @@ export default function ModalGetGeoData() {
             <UploadProfileImg />
           </Tab>
 
-          <Tab key="profile" title="User Details">
+          <Tab key="profile" title="Personal Details">
             <Card>
               <CardBody>
                 <Input
@@ -274,6 +274,15 @@ export default function ModalGetGeoData() {
                   required
                 />
                 <Input
+                  label="Max Distance"
+                  type="number"
+                  placeholder="Enter max. distance in km where you can offer help"
+                  value={profile.maxDistance}
+                  onChange={(e) =>
+                    setProfile({ ...profile, maxDistance: e.target.value })
+                  }
+                />
+                <Input
                   label="Username"
                   placeholder="Enter Username"
                   value={profile.username}
@@ -287,17 +296,9 @@ export default function ModalGetGeoData() {
                   readOnly
                   required
                 />
-                <Input
-                  label="Max Distance"
-                  type="number"
-                  placeholder="Enter max. distance in km where you can offer help"
-                  value={profile.maxDistance}
-                  onChange={(e) =>
-                    setProfile({ ...profile, maxDistance: e.target.value })
-                  }
-                />
+
                 <Button isLoading={isLoading} onPress={updateProfile}>
-                  Update User Details
+                  Update User
                 </Button>
               </CardBody>
             </Card>
@@ -388,7 +389,7 @@ export default function ModalGetGeoData() {
                   isLoading={isLoading}
                   onPress={updateAddress}
                 >
-                  Update Address Details
+                  Update Address
                 </Button>
               </CardBody>
               <Button
@@ -399,10 +400,10 @@ export default function ModalGetGeoData() {
                 variant="bordered"
                 onPress={async () => {
                   const { lat, lon } = await getCurrentLocation();
-                  setGeoCoordinates({ lat, lon });
+                  await setGeoCoordinates({ lat, lon });
                 }}
               >
-                Get Current Location from Device
+                Get Device Location
               </Button>
               <CardBody>
                 <Input

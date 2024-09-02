@@ -18,32 +18,31 @@ import Mod_AcceptRejectOffer from "./Mod_AccepRejectOffer";
 import PleaseLogin from "../PleaseLogin";
 import { AuthContext } from "../../context/AuthProvider";
 
-//Data Table for logged in user Requests where rStatus < 2
+// Data Table for logged in user Requests where rStatus < 2
 const UD_MyRequests = () => {
   const [requests, setRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showLoginPage, setShowLoginPage] = useState(false); // to manage state when Axios fetch is having an error
   const { user } = useContext(AuthContext);
-
   const navigate = useNavigate();
 
   useEffect(() => {
     const getRequests = async () => {
       try {
         const res = await axios.get(
-          `${ENVConfig.API_ServerURL}/requests?rUserId=${user._id}&rStatus=0`,
+          `${ENVConfig.API_ServerURL}/requests?rUserId=${user._id}`,
           {
+            params: { rStatus: { $lt: 3 } },
+
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }
         );
         if (res.data) {
-          // console.log(res.data);
           setRequests(res.data);
         }
       } catch (error) {
-        // Check if the error response exists and display the error message
         if (error.response) {
           console.error(
             `(${error.response.status}) ${error.response.data.error}`
@@ -68,7 +67,6 @@ const UD_MyRequests = () => {
       });
       setRequests(requests.filter((request) => request._id !== id));
     } catch (error) {
-      // Check if the error response exists and display the error message
       if (error.response) {
         console.error(
           `(${error.response.status}) ${error.response.data.error}`
@@ -96,23 +94,26 @@ const UD_MyRequests = () => {
     { key: "rCategory", label: "REQUEST CATEGORY" },
     { key: "rText", label: "REQUEST TEXT" },
     { key: "rDate", label: "REQUEST DATE" },
-    { key: "rImage", label: "REQUEST IMAGE(ES)" },
+    { key: "rImage", label: "REQUEST IMAGE(S)" },
     { key: "offerCount", label: "PENDING OFFERS" },
-    { key: "actions", label: "ACTIONS" }, // New column for action buttons
+    { key: "actions", label: "ACTIONS" },
   ];
-  // If showLoginPage is true, render the PleaseLogin component
+
   if (showLoginPage) {
     return <PleaseLogin />;
   }
 
   return (
-    <div className="">
+    <div>
       <Table
         isHeaderSticky
         color="primary"
         selectionMode="single"
         defaultSelectedKeys={["2"]}
         isStriped
+        className={{
+          wrapper: "max-h-[382px]",
+        }}
         aria-label="Expandable table with dynamic content"
       >
         <TableHeader>
@@ -120,13 +121,31 @@ const UD_MyRequests = () => {
             <TableColumn key={column.key}>{column.label}</TableColumn>
           ))}
         </TableHeader>
-        <TableBody items={requests}>
+        <TableBody
+          items={requests}
+          emptyContent={
+            "No pending Request(s) to display, please + Add a new Request."
+          }
+          isLoading={isLoading}
+          loadingContent={<Spinner label="Loading..." />}
+        >
           {requests.map((item) => (
             <TableRow key={item._id}>
               {columns.map((column) => (
                 <TableCell key={column.key}>
                   {column.key === "rStatus" ? (
-                    statusLabels[item[column.key]] || "Unknown Status"
+                    <span
+                      style={{
+                        color:
+                          item[column.key] === 0
+                            ? "red"
+                            : item[column.key] === 1
+                            ? "green"
+                            : "inherit", // Default color if not Awaiting Offer or Offer Received
+                      }}
+                    >
+                      {statusLabels[item[column.key]] || "Unknown Status"}
+                    </span>
                   ) : column.key === "rDate" ? (
                     formatDate(item[column.key])
                   ) : column.key === "offerCount" ? (
@@ -136,7 +155,7 @@ const UD_MyRequests = () => {
                     />
                   ) : column.key === "rImage" ? (
                     item.rImage.length > 0 ? (
-                      `${item.rImage.count} Image(s) available`
+                      `${item.rImage.length} Image(s) available`
                     ) : (
                       "No image available"
                     )

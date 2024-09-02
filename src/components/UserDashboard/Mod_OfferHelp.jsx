@@ -31,8 +31,12 @@ export default function Mod_OfferHelp({ id, isDisabled }) {
     if (!offerText) {
       return console.error("Offer Text is required");
     }
-    console.log("reqId: ", id);
-
+    console.log({
+      oText: offerText,
+      oDate: offerDate.toString(), // Ensure it's correctly formatted
+      oUserId: user._id,
+      requestId: id,
+    });
     try {
       const res = await axios.post(
         `${ENVConfig.API_ServerURL}/offers`,

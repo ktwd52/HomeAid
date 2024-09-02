@@ -12,7 +12,7 @@ const UserDashboard = () => {
   const { user } = useContext(AuthContext); // Move useContext inside the component
 
   return (
-    <div className="l">
+    <div className="bg-gradient-to-b bg-gradient-to-r from-gray-100 to-gray-300">
       <Tabs
         // disabledKeys={
         //   user.isOfferingHelp ? ["offers", "inactive"] : ["inactive"]
@@ -29,8 +29,12 @@ const UserDashboard = () => {
         <Tab key="offers" title="Offer Help">
           <UD_OfferHelp />
         </Tab>
-        <Tab key="mytasks" title="My Tasklist">
+        <Tab key="myOtasks" title="My Offered Tasklist">
+          <div> My Offered Task List to be done</div>
           <UD_TaskLMyOffers />
+        </Tab>
+        <Tab key="myRtasks" title="My Requested Tasklist">
+          <div>My Requested Task List In Progress waiting to complete</div>
           <UD_TaskLMyRequests />
         </Tab>
         <Tab key="metrics" title="Metrics">
