@@ -36,6 +36,7 @@ const AuthProvider = ({ children }) => {
         navigate("/login");
       })
       .catch(console.log);
+
     console.log(data);
   };
 
@@ -75,7 +76,7 @@ const AuthProvider = ({ children }) => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
-      .then((resp) => {
+      .then((res) => {
         // Handle the successful response here
         console.log("Update Profile : ", res.data);
       })

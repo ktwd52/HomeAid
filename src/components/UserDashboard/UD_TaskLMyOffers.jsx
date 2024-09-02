@@ -1,7 +1,7 @@
-import ENVConfig from "../Utils/env.config";
+import ENVConfig from "../../Utils/env.config";
 import axios from "axios";
-import formatDate from "../Utils/formatDate";
-import React, { useEffect, useState } from "react";
+import formatDate from "../../Utils/formatDate";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Table,
   TableHeader,
@@ -9,31 +9,37 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Spinner,
   Button,
 } from "@nextui-org/react";
 import { IconContext } from "react-icons/lib";
 import { BsTrash3 } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import ModalRequestDetails from "./ModalRequestDetails";
-import PleaseLogin from "./PleaseLogin";
+import Mod_OfferDetails from "./Mod_OfferDetails";
+import PleaseLogin from "../PleaseLogin";
+import { AuthContext } from "../../context/AuthProvider";
 
 // Main App Component
-const DataTableOffers = () => {
-  const [requests, setRequests] = useState([]);
-  const [deleteRequest, setDeleteRequest] = useState(true);
+const UD_TaskLMyOffers = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [offers, setOffers] = useState([]);
   const [showLoginPage, setShowLoginPage] = useState(false); // to manage state when Axios fetch is having an error
+  const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const getOffers = async () => {
       try {
-        const res = await axios.get(`${ENVConfig.API_ServerURL}/offers`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const res = await axios.get(
+          `${ENVConfig.API_ServerURL}/offers?oUserId=${user._id}`,
+          {
+            params: { oStatus: { $gte: 0, $lte: 8 } },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         if (res.data) {
           setOffers(res.data);
         }
@@ -48,6 +54,7 @@ const DataTableOffers = () => {
         }
         setShowLoginPage(true); // Show the login page on error
       }
+      setIsLoading(false);
     };
 
     getOffers();
@@ -60,8 +67,7 @@ const DataTableOffers = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      setRequests(offers.filter((offers) => offers._id !== id));
-      setDeleteRequest(true);
+      setOffers(offers.filter((offers) => offers._id !== id));
     } catch (error) {
       console.log(error);
     }
@@ -72,12 +78,11 @@ const DataTableOffers = () => {
   };
 
   const statusLabels = {
-    0: "Status 0",
     1: "Offer Sent",
     2: "Offer Rejected",
-    3: "Offer Withdrawn",
+    3: "Offer Canceled",
     5: "Offer Accepted",
-    7: "Offer Canceled",
+    6: "Offer Withdrawn",
     8: "In Progress",
     9: "Offer finished",
   };
@@ -97,7 +102,12 @@ const DataTableOffers = () => {
   return (
     <>
       <Table
-        aria-label="Expandable table with dynamic content"
+        isHeaderSticky="true"
+        color="primary"
+        selectionMode="single"
+        defaultSelectedKeys={["2"]}
+        isStriped
+        aria-label="HomeAid App Offer Table"
         className="fixed"
       >
         <TableHeader className="fixed" columns={columns}>
@@ -105,7 +115,12 @@ const DataTableOffers = () => {
             <TableColumn key={column.key}>{column.label}</TableColumn>
           )}
         </TableHeader>
-        <TableBody items={offers}>
+        <TableBody
+          emptyContent={"No rows to display."}
+          items={offers}
+          isLoading={isLoading}
+          loadingContent={<Spinner label="Loading..." />}
+        >
           {(item) => {
             console.log("Current item:", item); // Console log the item object here
             return (
@@ -118,7 +133,7 @@ const DataTableOffers = () => {
                       formatDate(item[columnKey])
                     ) : columnKey === "offerCount" ? (
                       item.offerId.length === 0 ? (
-                        <ModalRequestDetails
+                        <Mod_OfferDetails
                           offers={
                             item.offerId.length > 0
                               ? `${item.offerId.length} Offers`
@@ -134,12 +149,12 @@ const DataTableOffers = () => {
                     ) : columnKey === "actions" ? (
                       <div style={{ display: "flex", gap: "10px" }}>
                         <Button
-                          auto
+                          isDisabled
                           icon={<BsTrash3 />}
                           color="error"
                           onClick={() => deleteRequestById(item._id)}
                         >
-                          Delete
+                          {item.rStatus < 5 ? "Cancel&Delete" : "Withdraw"}
                         </Button>
                       </div>
                     ) : (
@@ -156,4 +171,4 @@ const DataTableOffers = () => {
   );
 };
 
-export default DataTableOffers;
+export default UD_TaskLMyOffers;

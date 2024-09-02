@@ -32,7 +32,7 @@ export default function Login() {
           <label htmlFor="email">
             Email:
             <input
-              type="text"
+              type="email"
               {...register("email", { required: true })}
               placeholder="email"
             />

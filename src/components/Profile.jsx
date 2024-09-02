@@ -1,11 +1,7 @@
-/* function Profile() {
-  return <>Profile</>;
-}
-
-export default Profile; */
 import { useForm } from "react-hook-form";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthProvider";
+import Mod_MyProfile from "./MyProfile/Mod_MyProfile";
 
 const groupAddressToObject = (formData) => {
   const {
@@ -19,6 +15,8 @@ const groupAddressToObject = (formData) => {
     state,
     country,
     postcode,
+    longitude,
+    latitude,
     isOfferingHelp,
     email,
     username,
@@ -28,16 +26,20 @@ const groupAddressToObject = (formData) => {
     lastname,
     language,
     phone,
-    postcode,
     isOfferingHelp,
     email,
     username,
     adressObj: {
       house_number,
       road,
+      postcode,
       city,
       state,
       country,
+      geoLocation: {
+        longitude,
+        latitude,
+      },
     },
   };
 };
@@ -59,7 +61,8 @@ const ungroupAddressToFields = (profile) => {
     lastname,
     language,
     phone,
-    ...(adressObj ? adressObj : {}),
+    ...(adressObj || {}),
+    ...(adressObj?.geoLocation || {}),
     isOfferingHelp,
     email,
     username,
@@ -79,48 +82,18 @@ const labels = [
     type: "text",
     placeholder: "Last Name",
   },
-  {
-    label: "Language",
-    id: "language",
-    type: "text",
-    placeholder: "language",
-  },
-  {
-    label: "Phone",
-    id: "phone",
-    type: "tel",
-    placeholder: "phone",
-  },
+  { label: "Language", id: "language", type: "text", placeholder: "Language" },
+  { label: "Phone", id: "phone", type: "tel", placeholder: "Phone" },
   {
     label: "House number",
     id: "house_number",
     type: "text",
-    placeholder: "house_number",
+    placeholder: "House Number",
   },
-  {
-    label: "Road",
-    id: "road",
-    type: "text",
-    placeholder: "road",
-  },
-  {
-    label: "State",
-    id: "state",
-    type: "text",
-    placeholder: "state",
-  },
-  {
-    label: "City",
-    id: "city",
-    type: "text",
-    placeholder: "city",
-  },
-  {
-    label: "Country",
-    id: "country",
-    type: "text",
-    placeholder: "country",
-  },
+  { label: "Road", id: "road", type: "text", placeholder: "Road" },
+  { label: "State", id: "state", type: "text", placeholder: "State" },
+  { label: "City", id: "city", type: "text", placeholder: "City" },
+  { label: "Country", id: "country", type: "text", placeholder: "Country" },
   {
     label: "Postal Code",
     id: "postcode",
@@ -128,23 +101,35 @@ const labels = [
     placeholder: "Postal Code",
   },
   {
+    label: "Adress - Longitude",
+    id: "longitude",
+    type: "text",
+    placeholder: "Longitude",
+  },
+  {
+    label: "Adress - Latitude",
+    id: "latitude",
+    type: "text",
+    placeholder: "Latitude",
+  },
+  {
     label: "Offering Help",
     id: "isOfferingHelp",
     type: "checkbox",
-    placeholder: "isOfferingHelp",
+    placeholder: "Offering Help",
   },
   {
     label: "Email",
     id: "email",
     type: "text",
-    placeholder: "email",
+    placeholder: "Email",
     disabled: true,
   },
   {
     label: "Username",
     id: "username",
     type: "text",
-    placeholder: "username",
+    placeholder: "Username",
     disabled: true,
   },
 ];
@@ -167,14 +152,12 @@ const LabelField = ({
       {...callback(id, { required: false })}
       placeholder={placeholder}
       disabled={disabled}
-      value={value}
+      value={value || ""}
       onChange={(e) =>
-        setFormData((prev) => {
-          return {
-            ...prev,
-            [id]: e.target.value,
-          };
-        })
+        setFormData((prev) => ({
+          ...prev,
+          [id]: e.target.value,
+        }))
       }
     />
     <br /> <br />
@@ -183,45 +166,31 @@ const LabelField = ({
 
 function Profile() {
   const [formData, setFormData] = useState({});
+  const { register, handleSubmit } = useForm();
+  const { profile, getProfile, updateprofile } = useContext(AuthContext);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-  const {
-    user,
-    profile,
-    login,
-    signup,
-    setProfile,
-    getProfile,
-    updateprofile,
-  } = useContext(AuthContext);
   useEffect(() => {
     getProfile();
   }, []);
 
   useEffect(() => {
-    console.log("Profile changed", profile);
     if (profile) {
       setFormData(ungroupAddressToFields(profile));
     }
   }, [profile]);
 
-  console.log("Render", profile);
-
   const onSubmit = (data) => {
-    console.log("onSubmit ", data);
     updateprofile(groupAddressToObject(data));
   };
+
   return (
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="grid bg-orange-400 py-16 gap-y-4 px-8"
       >
-        <h1>Hi {formData?.username}, please update your details.. </h1> <br />
+        <h1>Hi {formData?.username}, please update your details.. </h1>
+        <br />
         <fieldset>
           <legend>
             {labels.map((label) => (
@@ -233,11 +202,12 @@ function Profile() {
                 type={label.type}
                 placeholder={label.placeholder}
                 disabled={label.disabled}
-                value={formData?.[label.id] ? formData[label.id] : ""}
+                value={formData?.[label.id] || ""}
                 setFormData={setFormData}
               />
             ))}
             <br /> <br />
+            <Mod_MyProfile />
             <button
               className="rounded-s-none p-2 max-w-sm mx-auto border-none bg-yellow-200"
               type="submit"
