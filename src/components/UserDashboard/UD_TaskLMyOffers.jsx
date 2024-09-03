@@ -34,7 +34,7 @@ const UD_TaskLMyOffers = () => {
         const res = await axios.get(
           `${ENVConfig.API_ServerURL}/offers?oUserId=${user._id}`,
           {
-            params: { oStatus: { $gte: 5, $lte: 8 } },
+            params: { oStatus: { $gte: 0, $lte: 9 } },
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
