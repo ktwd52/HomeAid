@@ -19,25 +19,21 @@ const UserDashboard = () => {
         // }
         aria-label="Disabled Options"
       >
-        <Tab key="allopenrequests" title="My Pending Requests">
-          <Card>
-            <CardBody>
-              <UD_MyRequests />
-            </CardBody>
-          </Card>
+        <Tab key="allopenrequests" title="My pending Request(s)">
+          <UD_MyRequests />
+        </Tab>
+        <Tab key="myRtasks" title="Track accepted Offer(s) ">
+          <div>My Requested Task List In Progress waiting to complete</div>
+          <UD_TaskLMyRequests />
         </Tab>
         <Tab key="offers" title="Offer Help">
           <UD_OfferHelp />
         </Tab>
-        <Tab key="myOtasks" title="My Offered Tasklist">
+        <Tab key="myOtasks" title="My Tasklist - Offer(s)">
           <div> My Offered Task List to be done</div>
           <UD_TaskLMyOffers />
         </Tab>
-        <Tab key="myRtasks" title="My Requested Tasklist">
-          <div>My Requested Task List In Progress waiting to complete</div>
-          <UD_TaskLMyRequests />
-        </Tab>
-        <Tab key="metrics" title="Metrics">
+        <Tab key="metrics" title="Metrics / KPI">
           <p>Metrics Diagrams etc....</p>
         </Tab>
         <Tab key="inactive" title="Inactive TBD">
