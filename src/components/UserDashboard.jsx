@@ -12,7 +12,7 @@ const UserDashboard = () => {
   const { user } = useContext(AuthContext); // Move useContext inside the component
 
   return (
-    <div className="bg-[url('../../../img/HomeAid-Logo.JPG') bg-repeat">
+    <div className="pt-4">
       <Tabs
         // disabledKeys={
         //   user.isOfferingHelp ? ["offers", "inactive"] : ["inactive"]

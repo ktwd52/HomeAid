@@ -24,6 +24,7 @@ import AuthProvider from "./context/AuthProvider";
 import Navbar from "./components/Navbar";
 import Profile from "./components/Profile_old";
 import Mod_MyProfile from "./components/MyProfile/Mod_MyProfile";
+import AdminDashboard from "./components/AdminDashboard";
 
 const publicLinks = [
   { name: "Home", value: "/" },
@@ -32,24 +33,26 @@ const publicLinks = [
 ];
 
 const protectedLinks = [
+  { name: "Home", value: "/app/" },
   { name: "+ Add new request", value: "/app/requests" },
   { name: "User Dashboard", value: "/app/user-dashboard" },
-  { name: "My Profile", value: "/app/my-profile" },
-  { name: "MyP-old", value: "/app/my-profile-old" },
+  // { name: "My Profile", value: "/app/my-profile" },
+  // { name: "MyP-old", value: "/app/my-profile-old" },
 ];
 
 const PageLayout = ({ links, showLogout }) => {
   const navigate = useNavigate();
 
   return (
-    <>
+    <div className="flex flex-col h-lvh">
       <AuthProvider>
         <Navbar links={links} showLogout={showLogout} />
-        <Outlet />
+        <div className="flex-grow bg-amber-50">
+          <Outlet />
+        </div>
       </AuthProvider>
       <Footer />
-      {/* <p className="bg-primary text-primary-content bg-yellow-200">Footer</p> */}
-    </>
+    </div>
   );
 };
 
@@ -84,9 +87,11 @@ function App() {
           element={<PageLayout links={protectedLinks} showLogout />}
         >
           <Route path="app" element={<Protected />}>
+            <Route index element={<Home />} />
             <Route path="requests" element={<Requests />} />
             <Route path="user-dashboard" element={<UserDashboard />} />
-            <Route path="my-profile-old" element={<Profile />} />
+            <Route path="admin" element={<AdminDashboard />} />
+            {/* <Route path="my-profile-old" element={<Profile />} /> */}
             <Route path="my-profile" element={<Mod_MyProfile />} />
           </Route>
         </Route>
