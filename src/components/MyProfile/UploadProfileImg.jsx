@@ -37,7 +37,8 @@ function UploadProfileImg() {
         `Image upload successful to: ${response.data.file.path}`,
         "success"
       );
-      setImage(response.data.imageUrl); // Assuming response contains the image URL
+      console.log(response.data);
+      // setImage(response.data); // Assuming response contains the image URL
     } catch (error) {
       console.error("Error uploading image:", error);
       showToast(

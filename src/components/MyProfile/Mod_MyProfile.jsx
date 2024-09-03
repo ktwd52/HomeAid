@@ -1,54 +1,40 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  useDisclosure,
-  Input,
-  Tabs,
-  Tab,
-  Card,
-  CardBody,
-} from "@nextui-org/react";
+import { Input, Image, Tabs, Tab, Button } from "@nextui-org/react";
 import ENVConfig from "../../Utils/env.config";
 import { AuthContext } from "../../context/AuthProvider";
 import UploadProfileImg from "../ImageUpload/UploadProfileImg";
 
-export default function ModalGetGeoData() {
+export default function Mod_MyProfile() {
   const { user } = useContext(AuthContext);
   const APIKey = import.meta.env.VITE_LIQ_APIKEY;
-
-  // Initialize states with defaults and checks for undefined properties
-  const addressObj = user.addressObj || {};
 
   const [profile, setProfile] = useState({
     firstname: user.firstname || "",
     lastname: user.lastname || "",
     phone: user.phone || "",
+    profileimg: user.profileimg || "../../../img/profile_avatar.png",
     updatedBy: user.username || undefined,
-    username: user.username || "", // readonly
-    email: user.email || "", // readonly
+    username: user.username || "",
+    email: user.email || "",
     maxDistance: user.maxDistance || 5,
   });
 
   const [geoCoordinates, setGeoCoordinates] = useState({
-    lat: addressObj.geoLocation?.coordinates?.[1] || "", // lat and lon might be in different order
-    lon: addressObj.geoLocation?.coordinates?.[0] || "",
+    lat: user?.addressObj?.geoLocation?.coordinates?.[1] || "",
+    lon: user?.addressObj?.geoLocation?.coordinates?.[0] || "",
   });
 
   const [addressObjState, setAddressObjState] = useState({
-    house_number: addressObj.house_number || "",
-    road: addressObj.road || "",
-    postcode: addressObj.postcode || "",
-    city: addressObj.city || "",
-    state: addressObj.state || "",
-    country: addressObj.country || "",
+    house_number: user?.addressObj?.house_number || "",
+    road: user?.addressObj?.road || "",
+    postcode: user?.addressObj?.postcode || "",
+    city: user?.addressObj?.city || "",
+    state: user?.addressObj?.state || "",
+    county: user?.addressObj?.county || "",
+    country: user?.addressObj?.country || "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -56,18 +42,6 @@ export default function ModalGetGeoData() {
   // Toast Message setup
   const showToast = (message, type = "error") => {
     toast(message, { type });
-  };
-
-  const validateProfile = () => {
-    if (!profile.firstname || !profile.lastname || !profile.phone) {
-      showToast("First name, last name, and phone number are required.");
-      return false;
-    }
-    if (profile.maxDistance < 1 || profile.maxDistance > 99) {
-      showToast("Max distance must be between 1 and 99 km.");
-      return false;
-    }
-    return true;
   };
 
   const validateAddress = () => {
@@ -88,7 +62,7 @@ export default function ModalGetGeoData() {
     try {
       setIsLoading(true);
 
-      const { house_number, road, postcode, city, state, country } =
+      const { house_number, road, postcode, city, state, county, country } =
         addressObjState;
 
       const response = await axios.get(
@@ -109,8 +83,54 @@ export default function ModalGetGeoData() {
     }
   };
 
-  const updateProfile = async () => {
-    if (!validateProfile()) return;
+  const getCurrentLocation = async () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          setGeoCoordinates({ lat: latitude, lon: longitude });
+
+          showToast(
+            `Latitude: ${latitude}, Longitude: ${longitude}`,
+            "success"
+          );
+
+          await getReverseGeoData(latitude, longitude);
+        },
+        (error) => {
+          showToast("Error getting location: ", error.message);
+          console.error("Error getting location:", error);
+        }
+      );
+    } else {
+      showToast("Geolocation is not supported by this browser.");
+      console.error("Geolocation is not supported by this browser.");
+    }
+  };
+
+  const getReverseGeoData = async (lat, lon) => {
+    try {
+      setIsLoading(true);
+      const options = {
+        method: "GET",
+        url: `https://eu1.locationiq.com/v1/reverse?lat=${lat}&lon=${lon}&format=json&zoom=16&normalizeaddress=1&key=${APIKey}`,
+        headers: { accept: "application/json" },
+      };
+
+      const response = await axios.request(options);
+
+      if (response.data) {
+        showToast("Address fetched successfully!", "success");
+        setAddressObjState(response.data.address);
+      }
+    } catch (error) {
+      handleAxiosError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateUserProfile = async () => {
     try {
       setIsLoading(true);
       const res = await axios.put(
@@ -120,7 +140,6 @@ export default function ModalGetGeoData() {
           lastname: profile.lastname,
           phone: profile.phone,
           maxDistance: profile.maxDistance,
-          updatedBy: user.username,
         },
         {
           headers: {
@@ -131,7 +150,6 @@ export default function ModalGetGeoData() {
 
       if (res.data) {
         showToast("Profile updated successfully!", "success");
-        setProfile(res.data);
       }
     } catch (error) {
       handleAxiosError(error);
@@ -141,14 +159,20 @@ export default function ModalGetGeoData() {
   };
 
   const updateAddress = async () => {
-    if (!validateAddress()) return;
-    await getCoordinatesFromAddress();
+    if (!geoCoordinates.lat || !geoCoordinates.lon) {
+      if (!validateAddress()) return;
+      await getCoordinatesFromAddress();
+    }
 
-    // Update address object with coordinates
+    if (!validateAddress() && (!geoCoordinates.lat || !geoCoordinates.lon)) {
+      showToast("All address fields and coordinates are required.");
+      return;
+    }
+
     const updatedAddressObj = {
       ...addressObjState,
       geoLocation: {
-        coordinates: [geoCoordinates.lon, geoCoordinates.lat], // Ensure correct order: [lon, lat]
+        coordinates: [geoCoordinates.lon, geoCoordinates.lat],
       },
     };
 
@@ -176,49 +200,9 @@ export default function ModalGetGeoData() {
     }
   };
 
-  function getCurrentLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-          await setGeoCoordinates(latitude, longitude);
-          showToast(
-            `Latitude: ${latitude}, Longitude: ${longitude}`,
-            "success"
-          );
-        },
-        (error) => {
-          showToast("Error getting location: ", error);
-          console.error("Error getting location:", error);
-        }
-      );
-    } else {
-      showToast("Geolocation is not supported by this browser.");
-      console.error("Geolocation is not supported by this browser.");
-    }
-  }
-
-  const getReverseGeoData = async () => {
-    try {
-      setIsLoading(true);
-      const { lat, lon } = geoCoordinates;
-      const options = {
-        method: "GET",
-        url: `https://eu1.locationiq.com/v1/reverse?lat=${lat}&lon=${lon}&format=json&zoom=16&normalizeaddress=1&key=${APIKey}`,
-        headers: { accept: "application/json" },
-      };
-
-      const response = await axios.request(options);
-
-      if (response.data) {
-        showToast("Address fetched successfully!", "success");
-        setAddressObjState(response.data.address);
-      }
-    } catch (error) {
-      handleAxiosError(error);
-    } finally {
-      setIsLoading(false);
-    }
+  const updateAll = async () => {
+    await updateUserProfile();
+    await updateAddress();
   };
 
   const handleAxiosError = (error) => {
@@ -229,215 +213,203 @@ export default function ModalGetGeoData() {
     }
   };
 
-  const updateAll = async () => {
-    await updateProfile();
-    await updateAddress();
-  };
-
   return (
     <>
       <ToastContainer />
-      <div className="flex w-full flex-col">
-        <Tabs aria-label="Options">
-          <Tab key="profileimg" title="Profile Picture / Avatar">
-            <UploadProfileImg />
-          </Tab>
+      <div className="flex">
+        <Image
+          isZoomed
+          isBlurred
+          width={300}
+          height={300}
+          alt="Profile Avatar"
+          src={profile.profileimg}
+          className="flex w-[300px] h-[300px] snap-center rounded-full"
+        />
+        <Button className="flex" />
+        <UploadProfileImg className="flex align-baseline" />
+      </div>
 
-          <Tab key="profile" title="Personal Details">
-            <Card>
-              <CardBody>
-                <Input
-                  label="First Name"
-                  placeholder="Enter First Name"
-                  value={profile.firstname}
-                  onChange={(e) =>
-                    setProfile({ ...profile, firstname: e.target.value })
-                  }
-                  required
-                />
-                <Input
-                  label="Last Name"
-                  placeholder="Enter Last Name"
-                  value={profile.lastname}
-                  onChange={(e) =>
-                    setProfile({ ...profile, lastname: e.target.value })
-                  }
-                  required
-                />
-                <Input
-                  label="Phone Number"
-                  placeholder="Enter Phone Number"
-                  value={profile.phone}
-                  onChange={(e) =>
-                    setProfile({ ...profile, phone: e.target.value })
-                  }
-                  required
-                />
-                <Input
-                  label="Max Distance"
-                  type="number"
-                  placeholder="Enter max. distance in km where you can offer help"
-                  value={profile.maxDistance}
-                  onChange={(e) =>
-                    setProfile({ ...profile, maxDistance: e.target.value })
-                  }
-                />
-                <Input
-                  label="Username"
-                  placeholder="Enter Username"
-                  value={profile.username}
-                  readOnly
-                  required
-                />
-                <Input
-                  label="Email"
-                  placeholder="Enter Email"
-                  value={profile.email}
-                  readOnly
-                  required
-                />
+      <Tabs aria-label="Options" className="flex">
+        <Tab key="profile" title="Personal Details">
+          <Input
+            label="First Name"
+            placeholder="Enter First Name"
+            value={profile.firstname}
+            onChange={(e) =>
+              setProfile({ ...profile, firstname: e.target.value })
+            }
+            required
+          />
+          <Input
+            label="Last Name"
+            placeholder="Enter Last Name"
+            value={profile.lastname}
+            onChange={(e) =>
+              setProfile({ ...profile, lastname: e.target.value })
+            }
+            required
+          />
+          <Input
+            label="Phone Number"
+            placeholder="Enter Phone Number"
+            value={profile.phone}
+            onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+            required
+          />
+          <Input
+            label="Max Distance"
+            type="number"
+            placeholder="Enter max. distance in km where you can offer help"
+            value={profile.maxDistance}
+            onChange={(e) =>
+              setProfile({ ...profile, maxDistance: e.target.value })
+            }
+          />
+          <Input
+            label="Username"
+            placeholder="Enter Username"
+            value={profile.username}
+            readOnly
+            required
+          />
+          <Input
+            label="Email"
+            placeholder="Enter Email"
+            value={profile.email}
+            readOnly
+            required
+          />
+          <Button
+            onClick={updateUserProfile}
+            disabled={isLoading}
+            color="primary"
+            className="mt-4"
+          >
+            Update User Profile
+          </Button>
+        </Tab>
+        <Tab key="address" title="Address Details">
+          <Input
+            label="City"
+            placeholder="Enter City"
+            value={addressObjState.city}
+            onChange={(e) =>
+              setAddressObjState({
+                ...addressObjState,
+                city: e.target.value,
+              })
+            }
+            required
+          />
+          <Input
+            label="Road"
+            placeholder="Enter Road"
+            value={addressObjState.road}
+            onChange={(e) =>
+              setAddressObjState({
+                ...addressObjState,
+                road: e.target.value,
+              })
+            }
+            required
+          />
+          <Input
+            label="House Number"
+            placeholder="Enter House Number"
+            value={addressObjState.house_number}
+            onChange={(e) =>
+              setAddressObjState({
+                ...addressObjState,
+                house_number: e.target.value,
+              })
+            }
+            required
+          />
+          <Input
+            label="Postcode"
+            placeholder="Enter Postcode"
+            value={addressObjState.postcode}
+            onChange={(e) =>
+              setAddressObjState({
+                ...addressObjState,
+                postcode: e.target.value,
+              })
+            }
+          />
+          <Input
+            label="State"
+            placeholder="Enter State"
+            value={addressObjState.state}
+            onChange={(e) =>
+              setAddressObjState({
+                ...addressObjState,
+                state: e.target.value,
+              })
+            }
+          />
+          <Input
+            label="County"
+            placeholder="Enter County"
+            value={addressObjState.county}
+            onChange={(e) =>
+              setAddressObjState({
+                ...addressObjState,
+                county: e.target.value,
+              })
+            }
+          />
+          <Input
+            label="Country"
+            placeholder="Enter Country"
+            value={addressObjState.country}
+            onChange={(e) =>
+              setAddressObjState({
+                ...addressObjState,
+                country: e.target.value,
+              })
+            }
+            required
+          />
+          <Input
+            label="Latitude"
+            placeholder="Latitude"
+            value={geoCoordinates.lat}
+            onChange={(e) =>
+              setGeoCoordinates({ ...geoCoordinates, lat: e.target.value })
+            }
+          />
+          <Input
+            label="Longitude"
+            placeholder="Longitude"
+            value={geoCoordinates.lon}
+            onChange={(e) =>
+              setGeoCoordinates({ ...geoCoordinates, lon: e.target.value })
+            }
+          />
 
-                <Button isLoading={isLoading} onPress={updateProfile}>
-                  Update User
-                </Button>
-              </CardBody>
-            </Card>
-          </Tab>
-          <Tab key="address" title="Address Details">
-            <Card>
-              <CardBody>
-                <Input
-                  label="City"
-                  placeholder="Enter City"
-                  value={addressObjState.city}
-                  onChange={(e) =>
-                    setAddressObjState({
-                      ...addressObjState,
-                      city: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <Input
-                  label="Road"
-                  placeholder="Enter Road"
-                  value={addressObjState.road}
-                  onChange={(e) =>
-                    setAddressObjState({
-                      ...addressObjState,
-                      road: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <Input
-                  label="House Number"
-                  placeholder="Enter House Number"
-                  value={addressObjState.house_number}
-                  onChange={(e) =>
-                    setAddressObjState({
-                      ...addressObjState,
-                      house_number: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <Input
-                  label="Postcode"
-                  placeholder="Enter Postcode"
-                  value={addressObjState.postcode}
-                  onChange={(e) =>
-                    setAddressObjState({
-                      ...addressObjState,
-                      postcode: e.target.value,
-                    })
-                  }
-                />
-                <Input
-                  label="State"
-                  placeholder="Enter State"
-                  value={addressObjState.state}
-                  onChange={(e) =>
-                    setAddressObjState({
-                      ...addressObjState,
-                      state: e.target.value,
-                    })
-                  }
-                />
-                <Input
-                  label="Country"
-                  placeholder="Enter Country"
-                  value={addressObjState.country}
-                  onChange={(e) =>
-                    setAddressObjState({
-                      ...addressObjState,
-                      country: e.target.value,
-                    })
-                  }
-                />
-                {/* <Button
-                  className=""
-                  color="warning"
-                  isLoading={isLoading}
-                  onPress={getCoordinatesFromAddress}
-                >
-                  Get GeoCoordinates from Address
-                </Button> */}
-                <Button
-                  className=""
-                  color="warning"
-                  isLoading={isLoading}
-                  onPress={updateAddress}
-                >
-                  Update Address
-                </Button>
-              </CardBody>
-              <Button
-                isLoading={isLoading}
-                size="md"
-                className=""
-                radius="medium"
-                variant="bordered"
-                onPress={async () => {
-                  const { lat, lon } = await getCurrentLocation();
-                  await setGeoCoordinates({ lat, lon });
-                }}
-              >
-                Get Device Location
-              </Button>
-              <CardBody>
-                <Input
-                  label="Latitude"
-                  placeholder="Enter Latitude"
-                  value={geoCoordinates.lat}
-                  onChange={(e) =>
-                    setGeoCoordinates({
-                      ...geoCoordinates,
-                      lat: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <Input
-                  label="Longitude"
-                  placeholder="Enter Longitude"
-                  value={geoCoordinates.lon}
-                  onChange={(e) =>
-                    setGeoCoordinates({
-                      ...geoCoordinates,
-                      lon: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <Button isLoading={isLoading} onPress={getReverseGeoData}>
-                  Get Address from Current GeoLocation
-                </Button>
-              </CardBody>
-            </Card>
-          </Tab>
-        </Tabs>
-        <Button color="success" isLoading={isLoading} onPress={updateAll}>
+          <div className="flex justify-between mt-4">
+            <Button
+              onClick={getCurrentLocation}
+              disabled={isLoading}
+              color="primary"
+            >
+              Get Address from Coordinates
+            </Button>
+
+            <Button
+              onClick={updateAddress}
+              disabled={isLoading}
+              color="secondary"
+            >
+              Update Address
+            </Button>
+          </div>
+        </Tab>
+      </Tabs>
+
+      <div className="flex justify-between mt-4">
+        <Button onClick={updateAll} disabled={isLoading} color="primary">
           Update All
         </Button>
       </div>

@@ -1,3 +1,4 @@
+// Track accepted Offer(s)
 import ENVConfig from "../../Utils/env.config";
 import axios from "axios";
 import formatDate from "../../Utils/formatDate";
@@ -34,7 +35,7 @@ const UD_TaskLMyRequests = () => {
         const res = await axios.get(
           `${ENVConfig.API_ServerURL}/requests?rUserId=${user._id}`,
           {
-            params: { rStatus: { $gte: 6, $lte: 8 } },
+            params: { rStatus: { $gte: 0, $lte: 9 } },
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },

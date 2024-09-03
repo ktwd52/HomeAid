@@ -11,7 +11,7 @@ const Navbar = ({ links, showLogout = false }) => {
         <div className="flex items-left">
           <figure className="flex bg-local">
             <img
-              className="bg-local"
+              className="bg-local hover:animate-spin"
               src="\img\HomeAid-logo2.JPG"
               alt="The head and torso of a dinosaur skeleton;
             it has a large head with long sharp teeth"
