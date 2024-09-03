@@ -78,7 +78,7 @@ const UD_TaskLMyOffers = () => {
     console.log("id: ", id);
     try {
       await axios.put(
-        `${ENVConfig.API_ServerURL}/offers/${id}`,
+        `${ENVConfig.API_ServerURL}/offers/${id}/inprogress`,
         { oStatus: 7 },
         {
           headers: {
@@ -180,7 +180,7 @@ const UD_TaskLMyOffers = () => {
                           color="error"
                           onClick={() => deleteMyOfferById(item._id)}
                         >
-                          {item.rStatus < 5 ? "Cancel&Delete" : "Withdraw"}
+                          {item.rStatus < 6 ? "Cancel&Delete" : "Withdraw"}
                         </Button>
                       </div>
                     ) : (

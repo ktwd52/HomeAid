@@ -30,7 +30,7 @@ export default function Mod_AccepRejectOffer({ id, isDisabled, setRequests }) {
     const getOffers = async () => {
       try {
         const res = await axios.get(
-          `${ENVConfig.API_ServerURL}/offers?requestId=${id}&oStatus=0`,
+          `${ENVConfig.API_ServerURL}/offers?requestId=${id}&oStatus=1`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

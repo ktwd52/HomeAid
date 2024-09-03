@@ -1,3 +1,4 @@
+// My pending Request(s) rStatus = 0,1,2
 import ENVConfig from "../../Utils/env.config";
 import axios from "axios";
 import formatDate from "../../Utils/formatDate";
@@ -104,7 +105,7 @@ const UD_MyRequests = () => {
   }
 
   return (
-    <div>
+    <div className="bg-[url('../../../img/HomeAid-Logo.JPG') bg-repeat">
       <Table
         isHeaderSticky
         color="primary"
@@ -138,9 +139,9 @@ const UD_MyRequests = () => {
                       style={{
                         color:
                           item[column.key] === 0
-                            ? "red"
+                            ? "#f00"
                             : item[column.key] === 1
-                            ? "green"
+                            ? "#000"
                             : "inherit", // Default color if not Awaiting Offer or Offer Received
                       }}
                     >

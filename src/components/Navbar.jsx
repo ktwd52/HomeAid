@@ -17,10 +17,9 @@ const Navbar = ({ links, showLogout = false }) => {
       <div className=" items-center flex justify-between">
         <div className="flex flex-row items-center px-8">
           <img
-            className="mr-8"
+            className="mr-8 hover:animate-spin"
             src="\img\HomeAid-Logo.JPG"
-            alt="The head and torso of a dinosaur skeleton;
-          it has a large head with long sharp teeth"
+            alt="Logo of the Application with a Home and tools around it"
             width="100"
             height="100"
           />

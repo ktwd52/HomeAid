@@ -21,16 +21,17 @@ export default function Mod_CloseRequest({ id, setRequest }) {
 
   const handleClosingRequest = async (id, onClose) => {
     try {
+      console.log("rating: ", rating);
       const res = await axios.put(
         `${ENVConfig.API_ServerURL}/requests/${id}/close`,
-        { oFeedbackText: feedback, oRating: rating, requestId: id },
+        { oFeedbackText: feedback, oRating: rating },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      setRequest();
+      setRequest((prev) => prev.filter((request) => request._id !== id));
       onClose();
     } catch (error) {
       console.log(error);
@@ -68,7 +69,8 @@ export default function Mod_CloseRequest({ id, setRequest }) {
                   defaultValue={[4]}
                   showSteps={true}
                   orientation="horizontal"
-                  value={setRating()}
+                  onChange={(value) => setRating(value)}
+                  value={rating}
                 />
               </ModalBody>
               <ModalFooter>
