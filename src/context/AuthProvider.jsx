@@ -40,7 +40,7 @@ const AuthProvider = ({ children }) => {
       })
       // .catch(console.log);
       .catch((err) => {
-        toast.error("signup failed!");
+        toast.error("Signup failed!");
       });
     console.log(data);
   };
@@ -68,10 +68,14 @@ const AuthProvider = ({ children }) => {
         },
       })
       .then((res) => {
-        //navigate("/app/user-dashboard");
         toast.success("Request sent!");
+        navigate("/app/user-dashboard");
       })
-      .catch(console.log);
+
+      .catch((error) => {
+        toast.error("Request not sent!");
+      });
+
     console.log(data);
   };
 

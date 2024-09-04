@@ -1,7 +1,14 @@
 import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
-import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, User} from "@nextui-org/react";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Avatar,
+  User,
+} from "@nextui-org/react";
 
 const Navbar = ({ links, showLogout = false }) => {
   const { user, profile, logout } = useContext(AuthContext);
@@ -10,7 +17,7 @@ const Navbar = ({ links, showLogout = false }) => {
   const adminLink = { name: "Admin", value: "/app/admin" };
 
   console.log("Navbar", user);
-  
+
   return (
     <nav className="text-primary-content bg-yellow-200">
       {/* <div className="max-w-[60rem] m-auto flex justify-between items-center flex flex justify-between">  */}
@@ -23,18 +30,26 @@ const Navbar = ({ links, showLogout = false }) => {
             width="100"
             height="100"
           />
-          <h1 className="text-5xl font-sans tracking-widest text-amber-600 drop-shadow-lg">HomeAid</h1>
+          <h1 className="text-5xl font-sans tracking-widest text-amber-600 drop-shadow-lg">
+            HomeAid
+          </h1>
         </div>
         <div className="flex flex-row items-center">
           {links.map((link) => (
-            <div key={link.value} className="px-6 text-amber-600 font-bold hover:text-amber-800">
+            <div
+              key={link.value}
+              className="px-6 text-amber-600 font-bold hover:text-amber-800"
+            >
               <NavLink to={link.value}>{link.name}</NavLink>
             </div>
           ))}
-          {user?.isAdmin && (
-            <div key={adminLink.value} className="px-6 text-amber-600 font-bold hover:text-amber-800">
-            <NavLink to={adminLink.value}>{adminLink.name}</NavLink>
-          </div>
+          {user?.role === "admin" && user?.isAdmin && (
+            <div
+              key={adminLink.value}
+              className="px-6 text-amber-600 font-bold hover:text-amber-800"
+            >
+              <NavLink to={adminLink.value}>{adminLink.name}</NavLink>
+            </div>
           )}
           {showLogout && (
             <div className="px-6 text-amber-600 font-bold hover:text-amber-800">
@@ -42,17 +57,26 @@ const Navbar = ({ links, showLogout = false }) => {
                 <DropdownTrigger>
                   <User
                     as="button"
-                     avatarProps={{
-                       isBordered: true,
-                    //   src: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-                     }}
+                    avatarProps={{
+                      isBordered: true,
+                      //   src: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+                    }}
                     className="transition-transform"
                     description={`@${profile?.username}`}
-                    name={profile ? `${profile.firstname} ${profile.lastname}` : ''}
+                    name={
+                      profile?.firstname && profile?.lastname
+                        ? `${profile.firstname} ${profile.lastname}`
+                        : "please update My Profile page"
+                    }
                   />
                 </DropdownTrigger>
                 <DropdownMenu aria-label="User Actions" variant="flat">
-                  <DropdownItem key="profile" className="h-14 gap-2" color="warning" onClick={() => navigate('/app/my-profile')}>
+                  <DropdownItem
+                    key="profile"
+                    className="h-14 gap-2"
+                    color="warning"
+                    onClick={() => navigate("/app/my-profile")}
+                  >
                     <p className="">My Profile</p>
                   </DropdownItem>
                   <DropdownItem key="logout" color="warning" onClick={logout}>

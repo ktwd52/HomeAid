@@ -68,7 +68,7 @@ const UD_TaskLMyRequests = () => {
     5: "Offer Accepted",
     6: "Request deleted",
     7: "In Progress",
-    9: "Finished",
+    9: "Request Finished",
   };
 
   const columns = [

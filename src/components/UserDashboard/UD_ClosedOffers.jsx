@@ -111,7 +111,6 @@ const UD_TaskLMyOffers = () => {
     { key: "oText", label: "OFFER TEXT" },
     { key: "oDate", label: "DEADLINE OFFERED" },
     { key: "requestId.rUserId.username", label: "USERNAME REQUESTED" },
-    { key: "actions", label: "ACTIONS" }, // New column for action buttons
   ];
   // If showLoginPage is true, render the PleaseLogin component
   if (showLoginPage) {
@@ -165,24 +164,6 @@ const UD_TaskLMyOffers = () => {
                       ) // Count the number of offers
                     ) : columnKey === "oUserId.username" ? (
                       item[columnKey]
-                    ) : columnKey === "actions" ? (
-                      <div style={{ display: "flex", gap: "10px" }}>
-                        <Button
-                          icon={<BsTrash3 />}
-                          color="alert"
-                          onClick={() => putInProgressById(item._id)}
-                        >
-                          Start
-                        </Button>
-                        <Button
-                          isDisabled="false"
-                          icon={<BsTrash3 />}
-                          color="error"
-                          onClick={() => deleteMyOfferById(item._id)}
-                        >
-                          "Withdraw Offer"
-                        </Button>
-                      </div>
                     ) : (
                       item[columnKey]
                     )}

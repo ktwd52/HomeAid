@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { useForm } from "react-hook-form";
+
 import formatDate from "../Utils/formatDate";
 
 export default function Requests() {
@@ -25,8 +26,13 @@ export default function Requests() {
         className="flex flex-row justify-center bg-amber-50"
       >
         <div className="flex flex-col w-4/5 max-w-3xl bg-amber-200 shadow-lg px-5 py-4 mt-24 mb-36">
-          <h3 className="text-center py-6 text-lg font-bold text-amber-600">Create your Request</h3>
-          <label htmlFor="titleCategory" className="text-xs font-mono font-bold text-amber-600">
+          <h3 className="text-center py-6 text-lg font-bold text-amber-600">
+            Create your Request
+          </h3>
+          <label
+            htmlFor="titleCategory"
+            className="text-xs font-mono font-bold text-amber-600"
+          >
             Category
           </label>
           <select
@@ -40,7 +46,10 @@ export default function Requests() {
             <option value="gardening">Gardening</option>
             <option value="plumbing">Plumbing</option>
           </select>
-          <label htmlFor="date" className="text-xs font-mono mt-2 font-bold text-amber-600">
+          <label
+            htmlFor="date"
+            className="text-xs font-mono mt-2 font-bold text-amber-600"
+          >
             Deadline
           </label>
           <input
@@ -49,7 +58,15 @@ export default function Requests() {
             min={currentDate} // Set minimum date to today
             className="p-2 mb-2 bg-amber-100 text-amber-600 w-full sm:w-2/3 md:w-1/3"
           />
-          <label htmlFor="requesttext" className="text-xs font-mono mt-2 font-bold text-amber-600">
+          {errors.date?.type === "required" && (
+            <p role="alert" className="text-blue-500 pb-2">
+              Date is required...
+            </p>
+          )}
+          <label
+            htmlFor="requesttext"
+            className="text-xs font-mono mt-2 font-bold text-amber-600"
+          >
             Description
           </label>
           <textarea
@@ -58,7 +75,15 @@ export default function Requests() {
             className="p-2 mb-2 bg-amber-100 text-amber-600 placeholder:text-amber-600 placeholder:font-light"
             rows="8"
           />
-          <label htmlFor="avatar" className="text-xs font-mono mt-2 font-bold text-amber-600">
+          {errors.rText?.type === "required" && (
+            <p role="alert" className="text-blue-500 pb-2">
+              Request Text is required...
+            </p>
+          )}
+          <label
+            htmlFor="avatar"
+            className="text-xs font-mono mt-2 font-bold text-amber-600"
+          >
             Choose a Request picture:
           </label>
           <input

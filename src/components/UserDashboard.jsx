@@ -21,8 +21,16 @@ const UserDashboard = () => {
       }}
     >
       <div className="absolute inset-0 bg-cover bg-center"></div>
-      <Tabs className="w-full h-full" aria-label="Disabled Options">
-        <Tab key="allopenrequests" title="Accept Offer(s) for my Request(s)">
+      <Tabs
+        className=" font-bold "
+        aria-label="Disabled Options"
+        color="primary"
+      >
+        <Tab
+          key="allopenrequests"
+          title="Accept Offer(s) for my Request(s)"
+          className=""
+        >
           <div className="h-[1000px]">
             <h3 className="text-center text-green-700 font-extrabold">
               Below you can see all of your requests awaiting for an offer or
@@ -32,7 +40,7 @@ const UserDashboard = () => {
             <UD_MyRequests />
           </div>
         </Tab>
-        <Tab key="myRtasks" title="Track My Request(s)">
+        <Tab key="myRtasks" title="Track My Request(s)" color="primary">
           <h3 className="text-center text-green-700 font-extrabold">
             Below you can see all of your requests waiting to Start or allready
             in Progress, please click on the close button and rate the offer
@@ -43,7 +51,11 @@ const UserDashboard = () => {
             <UD_TaskLMyRequests />
           </div>
         </Tab>
-        <Tab key="myClosedRequests" title="My closed Request(s)">
+        <Tab
+          key="myClosedRequests"
+          title="My closed Request(s)"
+          color="primary"
+        >
           <h3 className="text-center text-green-700 font-extrabold">
             Below you can see your closed Requests
           </h3>
