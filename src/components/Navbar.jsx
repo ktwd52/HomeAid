@@ -1,59 +1,68 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
+import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, User} from "@nextui-org/react";
 
 const Navbar = ({ links, showLogout = false }) => {
-  const { logout } = useContext(AuthContext);
+  const { user, profile, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const adminLink = { name: "Admin", value: "/app/admin" };
+
+  console.log("Navbar", user);
+  
   return (
     <nav className="text-primary-content bg-yellow-200">
       {/* <div className="max-w-[60rem] m-auto flex justify-between items-center flex flex justify-between">  */}
-      <div className=" items-center flex justify-around  py-2 ">
-        <div className="flex items-left">
-          <figure className="flex bg-local">
-            <img
-              className="bg-local hover:animate-spin"
-              src="\img\HomeAid-logo2.JPG"
-              alt="The head and torso of a dinosaur skeleton;
-            it has a large head with long sharp teeth"
-              width="64"
-              height="34"
-            />
-
-            <figcaption>
-              {/* A T-Rex on display in the Manchester University Museum. */}
-            </figcaption>
-          </figure>
+      <div className=" items-center flex justify-between">
+        <div className="flex flex-row items-center px-8">
+          <img
+            className="mr-8 hover:animate-spin"
+            src="\img\HomeAid-Logo.JPG"
+            alt="Logo of the Application with a Home and tools around it"
+            width="100"
+            height="100"
+          />
+          <h1 className="text-5xl font-sans tracking-widest text-amber-600 drop-shadow-lg">HomeAid</h1>
         </div>
-        {/* <figure className="md:flex bg-slate-100 rounded-xl p-8 md:p-0 dark:bg-slate-800">
-  <img class="w-24 h-24 md:w-48 md:h-auto md:rounded-none rounded-full mx-auto" src="/sarah-dayan.jpg" alt="" width="384" height="512">
-  <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-    <blockquote>
-      <p class="text-lg font-medium">
-        “Tailwind CSS is the only framework that I've seen scale
-        on large teams. It’s easy to customize, adapts to any design,
-        and the build size is tiny.”
-      </p>
-    </blockquote>
-    <figcaption class="font-medium">
-      <div class="text-sky-500 dark:text-sky-400">
-        Sarah Dayan
-      </div>
-      <div class="text-slate-700 dark:text-slate-500">
-        Staff Engineer, Algolia
-      </div>
-    </figcaption>
-  </div>
-</figure> */}
-        {links.map((link) => (
-          <div key={link.value} className="">
-            <NavLink to={link.value}>{link.name}</NavLink>
+        <div className="flex flex-row items-center">
+          {links.map((link) => (
+            <div key={link.value} className="px-6 text-amber-600 font-bold hover:text-amber-800">
+              <NavLink to={link.value}>{link.name}</NavLink>
+            </div>
+          ))}
+          {user?.isAdmin && (
+            <div key={adminLink.value} className="px-6 text-amber-600 font-bold hover:text-amber-800">
+            <NavLink to={adminLink.value}>{adminLink.name}</NavLink>
           </div>
-        ))}
-        {showLogout && (
-          <div className="">
-            <NavLink onClick={logout}>Logout</NavLink>
-          </div>
-        )}
+          )}
+          {showLogout && (
+            <div className="px-6 text-amber-600 font-bold hover:text-amber-800">
+              <Dropdown placement="bottom-start">
+                <DropdownTrigger>
+                  <User
+                    as="button"
+                     avatarProps={{
+                       isBordered: true,
+                    //   src: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+                     }}
+                    className="transition-transform"
+                    description={`@${profile?.username}`}
+                    name={profile ? `${profile.firstname} ${profile.lastname}` : ''}
+                  />
+                </DropdownTrigger>
+                <DropdownMenu aria-label="User Actions" variant="flat">
+                  <DropdownItem key="profile" className="h-14 gap-2" color="warning" onClick={() => navigate('/app/my-profile')}>
+                    <p className="">My Profile</p>
+                  </DropdownItem>
+                  <DropdownItem key="logout" color="warning" onClick={logout}>
+                    Log Out
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+          )}
+        </div>
       </div>
       {/* <NavLink to="/contact">Contact</NavLink> */}
       {/* <NavLink to="/posts">Posts</NavLink> */}
