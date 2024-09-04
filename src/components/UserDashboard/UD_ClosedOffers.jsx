@@ -34,7 +34,7 @@ const UD_TaskLMyOffers = () => {
         const res = await axios.get(
           `${ENVConfig.API_ServerURL}/offers?oUserId=${user._id}`,
           {
-            params: { oStatus: { $in: [5, 7] } },
+            params: { oStatus: { $in: [6, 9] } },
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -99,9 +99,10 @@ const UD_TaskLMyOffers = () => {
   const statusLabels = {
     1: "Offer Sent",
     2: "Offer Rejected",
+    3: "Offer Canceled",
+    4: "Offer Withdrawn",
     5: "Offer Accepted",
-    6: "Offer Canceled/Withdrawn",
-    7: "Offer in Progress",
+    7: "In Progress",
     9: "Offer finished",
   };
 
@@ -149,11 +150,23 @@ const UD_TaskLMyOffers = () => {
                       statusLabels[item[columnKey]] || "Unknown Status"
                     ) : columnKey === "oDate" ? (
                       formatDate(item[columnKey])
+                    ) : columnKey === "offerCount" ? (
+                      item.offerId.length === 0 ? (
+                        <Mod_OfferDetails
+                          offers={
+                            item.offerId.length > 0
+                              ? `${item.offerId.length} Offers`
+                              : "No Offers"
+                          }
+                          isDisabled={item.offerId.length === 0} // Disable button if no offers
+                        />
+                      ) : (
+                        "-"
+                      ) // Count the number of offers
                     ) : columnKey === "oUserId.username" ? (
                       item[columnKey]
                     ) : columnKey === "actions" ? (
                       <div style={{ display: "flex", gap: "10px" }}>
-                        {item.oStatus !== 5} (<></>) : (
                         <Button
                           icon={<BsTrash3 />}
                           color="alert"
@@ -161,7 +174,6 @@ const UD_TaskLMyOffers = () => {
                         >
                           Start
                         </Button>
-                        )
                         <Button
                           isDisabled="false"
                           icon={<BsTrash3 />}

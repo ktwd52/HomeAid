@@ -82,7 +82,8 @@ const UD_OfferHelp = () => {
     0: "Awaiting Offer",
     1: "Offer Received",
     5: "Offer Accepted",
-    6: "In Progress",
+    6: "Request deleted",
+    7: "Request in Progress",
     9: "Finished",
   };
 

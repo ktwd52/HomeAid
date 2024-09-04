@@ -15,7 +15,7 @@ import {
 } from "@nextui-org/react";
 import { FaTrash, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Mod_AcceptRejectOffer from "./Mod_AccepRejectOffer";
+import Mod_AcceptRejectOffer from "./Mod_AcceptRejectOffer";
 import PleaseLogin from "../PleaseLogin";
 import { AuthContext } from "../../context/AuthProvider";
 
@@ -86,7 +86,8 @@ const UD_MyRequests = () => {
     0: "Awaiting Offer",
     1: "Offer Received",
     5: "Offer Accepted",
-    6: "In Progress",
+    6: "Request deleted",
+    7: "Request in Progress",
     9: "Finished",
   };
 
@@ -112,9 +113,7 @@ const UD_MyRequests = () => {
         selectionMode="single"
         defaultSelectedKeys={["2"]}
         isStriped
-        className={{
-          wrapper: "max-h-[382px]",
-        }}
+        className="h-full w-full"
         aria-label="Expandable table with dynamic content"
       >
         <TableHeader>
@@ -139,9 +138,9 @@ const UD_MyRequests = () => {
                       style={{
                         color:
                           item[column.key] === 0
-                            ? "#f00"
+                            ? "#f00" //red
                             : item[column.key] === 1
-                            ? "#000"
+                            ? "#000" //black
                             : "inherit", // Default color if not Awaiting Offer or Offer Received
                       }}
                     >

@@ -14,7 +14,7 @@ import {
 } from "@nextui-org/react";
 import { FaTrash, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Mod_AcceptRejectOffer from "./Mod_AccepRejectOffer";
+import Mod_AcceptRejectOffer from "./Mod_AcceptRejectOffer";
 import PleaseLogin from "../PleaseLogin";
 import { AuthContext } from "../../context/AuthProvider";
 

@@ -24,7 +24,7 @@ function UploadProfileImg() {
       formData.append("image", data.image[0]);
 
       const response = await axios.post(
-        `${ENVConfig.API_ServerURL}/auth/upload-img`,
+        `${ENVConfig.API_ServerURL}/auth/upload-profileimg`,
         formData,
         {
           headers: {
@@ -32,12 +32,12 @@ function UploadProfileImg() {
           },
         }
       );
-      console.log(response.data);
+      console.log(response.data - file);
       showToast(
         `Image upload successful to: ${response.data.file.path}`,
         "success"
       );
-      console.log(response.data);
+      console.log("res.data:", response.data);
       // setImage(response.data); // Assuming response contains the image URL
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -53,8 +53,9 @@ function UploadProfileImg() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <input type="file" {...register("image", { required: true })} />
         {errors.image && <span>This field is required</span>}
-
-        <button type="submit">Upload Image</button>
+        <div>
+          <button type="submit">Upload Image</button>
+        </div>
       </form>
 
       {image ? (
