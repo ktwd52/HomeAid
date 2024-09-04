@@ -108,11 +108,30 @@ const UD_TaskLMyRequests = () => {
             <TableRow key={item._id}>
               {columns.map((column) => (
                 <TableCell key={column.key}>
-                  {column.key === "rStatus"
-                    ? statusLabels[item[column.key]] || "Unknown Status"
-                    : column.key === "rDate"
-                    ? formatDate(item[column.key])
-                    : item[column.key]}
+                  {column.key === "rStatus" ? (
+                    <span
+                      style={{
+                        color:
+                          item[column.key] === 0
+                            ? "#cccccc" //lightgray
+                            : item[column.key] === 1
+                            ? "#996633" //brown
+                            : item[column.key] === 5
+                            ? "#ff00ff"
+                            : item[column.key] === 6
+                            ? "#ff3333"
+                            : item[column.key] === 7
+                            ? "#66a3ff" // blue
+                            : "inherit", // Default color if not Awaiting Offer or Offer Received
+                      }}
+                    >
+                      {statusLabels[item[column.key]] || "Unknown Status"}
+                    </span>
+                  ) : column.key === "rDate" ? (
+                    formatDate(item[column.key])
+                  ) : (
+                    item[column.key]
+                  )}
                 </TableCell>
               ))}
             </TableRow>

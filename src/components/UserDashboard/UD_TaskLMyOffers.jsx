@@ -13,6 +13,7 @@ import {
   Button,
 } from "@nextui-org/react";
 import { IconContext } from "react-icons/lib";
+import { FcStart } from "react-icons/fc";
 import { BsTrash3 } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import Mod_OfferDetails from "./Mod_OfferDetails";
@@ -146,29 +147,45 @@ const UD_TaskLMyOffers = () => {
                 {(columnKey) => (
                   <TableCell>
                     {columnKey === "oStatus" ? (
-                      statusLabels[item[columnKey]] || "Unknown Status"
+                      <span
+                        style={{
+                          color:
+                            item[columnKey] === 0
+                              ? "#cccccc" //lightgray
+                              : item[columnKey] === 1
+                              ? "#996633" //brown
+                              : item[columnKey] === 5
+                              ? "#ff00ff"
+                              : item[columnKey] === 6
+                              ? "#ff3333"
+                              : item[columnKey] === 7
+                              ? "#66a3ff" // blue
+                              : "inherit", // Default color if not Awaiting Offer or Offer Received
+                        }}
+                      >
+                        {statusLabels[item[columnKey]] || "Unknown Status"}
+                      </span>
                     ) : columnKey === "oDate" ? (
                       formatDate(item[columnKey])
                     ) : columnKey === "oUserId.username" ? (
                       item[columnKey]
                     ) : columnKey === "actions" ? (
                       <div style={{ display: "flex", gap: "10px" }}>
-                        {item.oStatus !== 5} (<></>) : (
                         <Button
-                          icon={<BsTrash3 />}
                           color="alert"
                           onClick={() => putInProgressById(item._id)}
+                          className="text-[white] text-[16px]"
                         >
-                          Start
+                          {item?.oStatus === 5 ? FcStart() : ""}
                         </Button>
-                        )
+
                         <Button
-                          isDisabled="false"
-                          icon={<BsTrash3 />}
+                          isDisabled={item?.oStatus === 5}
                           color="error"
                           onClick={() => deleteMyOfferById(item._id)}
+                          className="text-[black]"
                         >
-                          "Withdraw Offer"
+                          {BsTrash3()}
                         </Button>
                       </div>
                     ) : (

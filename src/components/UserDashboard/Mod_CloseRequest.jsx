@@ -42,7 +42,10 @@ export default function Mod_CloseRequest({ id, setRequest }) {
 
   return (
     <>
-      <Button onPress={onOpen}> Close Request</Button>
+      <Button color="success" onPress={onOpen}>
+        {" "}
+        Close Request
+      </Button>
       <Modal size="md" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (

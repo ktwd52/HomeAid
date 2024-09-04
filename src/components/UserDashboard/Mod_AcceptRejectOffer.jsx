@@ -117,8 +117,12 @@ export default function Mod_AccepRejectOffer({ id, isDisabled, setRequests }) {
 
   return (
     <>
-      <Button onPress={onOpen} isDisabled={isDisabled}>
-        {offers.length ? offers.length : 0}
+      <Button
+        onPress={onOpen}
+        color={offers?.length ? "success" : "inherit"}
+        isDisabled={!offers?.length} // Disable the button when offers are undefined or empty
+      >
+        {offers.length ? offers.length : ""}
       </Button>
       <Modal
         size="5xl"
@@ -147,8 +151,25 @@ export default function Mod_AccepRejectOffer({ id, isDisabled, setRequests }) {
                           {(columnKey) => (
                             <TableCell>
                               {columnKey === "oStatus" ? (
-                                statusLabels[item[columnKey]] ||
-                                "Unknown Status"
+                                <span
+                                  style={{
+                                    color:
+                                      item[columnKey] === 0
+                                        ? "#cccccc" //lightgray
+                                        : item[columnKey] === 1
+                                        ? "#996633" //brown
+                                        : item[columnKey] === 5
+                                        ? "#ff00ff"
+                                        : item[columnKey] === 6
+                                        ? "#ff3333"
+                                        : item[columnKey] === 7
+                                        ? "#66a3ff" // blue
+                                        : "inherit", // Default color if not Awaiting Offer or Offer Received
+                                  }}
+                                >
+                                  {statusLabels[item[columnKey]] ||
+                                    "Unknown Status"}
+                                </span>
                               ) : columnKey === "oDate" ? (
                                 formatDate(item[columnKey])
                               ) : columnKey === "oUserId.username" ? (

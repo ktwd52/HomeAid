@@ -8,8 +8,12 @@ import { AuthContext } from "../../context/AuthProvider";
 import UploadProfileImg from "./UploadProfileImg";
 
 export default function Mod_MyProfile() {
-  const { user } = useContext(AuthContext);
+  const { user, getProfile, updateprofile } = useContext(AuthContext);
   const APIKey = import.meta.env.VITE_LIQ_APIKEY;
+
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   const [profile, setProfile] = useState({
     firstname: user.firstname || "",
@@ -28,13 +32,13 @@ export default function Mod_MyProfile() {
   });
 
   const [addressObjState, setAddressObjState] = useState({
-    house_number: user?.addressObj?.house_number || "",
-    road: user?.addressObj?.road || "",
-    postcode: user?.addressObj?.postcode || "",
-    city: user?.addressObj?.city || "",
-    state: user?.addressObj?.state || "",
-    county: user?.addressObj?.county || "",
-    country: user?.addressObj?.country || "",
+    house_number: user.addressObj?.house_number || "",
+    road: user.addressObj?.road || "",
+    postcode: user.addressObj?.postcode || "",
+    city: user.addressObj?.city || "",
+    state: user.addressObj?.state || "",
+    county: user.addressObj?.county || "",
+    country: user.addressObj?.country || "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
