@@ -145,8 +145,25 @@ const UD_TaskLMyOffers = () => {
               <TableRow key={item._id}>
                 {(columnKey) => (
                   <TableCell>
-                    {columnKey === "oStatus" ? (
-                      statusLabels[item[columnKey]] || "Unknown Status"
+                    {columnKey === "rStatus" ? (
+                      <span
+                        style={{
+                          color:
+                            item[columnKey] === 0
+                              ? "#cccccc" //lightgrey
+                              : item[columnKey] === 1
+                              ? "#996633" //brown
+                              : item[columnKey] === 5
+                              ? "#ff00ff"
+                              : item[columnKey] === 6
+                              ? "#ff3333"
+                              : item[columnKey] === 7
+                              ? "#66a3ff" // blue
+                              : "inherit", // Default color if not Awaiting Offer or Offer Received
+                        }}
+                      >
+                        {statusLabels[item[columnKey]] || "Unknown Status"}
+                      </span>
                     ) : columnKey === "oDate" ? (
                       formatDate(item[columnKey])
                     ) : columnKey === "offerCount" ? (

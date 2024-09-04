@@ -13,7 +13,7 @@ import {
   Spinner,
   Button,
 } from "@nextui-org/react";
-import { FaTrash, FaEye } from "react-icons/fa";
+import { BsXCircle, BsCheckCircle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import Mod_AcceptRejectOffer from "./Mod_AcceptRejectOffer";
 import PleaseLogin from "../PleaseLogin";
@@ -96,9 +96,11 @@ const UD_MyRequests = () => {
     { key: "rCategory", label: "REQUEST CATEGORY" },
     { key: "rText", label: "REQUEST TEXT" },
     { key: "rDate", label: "REQUEST DATE" },
-    { key: "rImage", label: "REQUEST IMAGE(S)" },
-    { key: "offerCount", label: "PENDING OFFERS" },
-    { key: "actions", label: "ACTIONS" },
+    { key: "rDate", label: "REQUEST DATE" },
+
+    { key: "rImage", label: "PICTURE(S)" },
+    { key: "selectoffer", label: "SELECT OFFER" },
+    { key: "actions", label: "DELETE" },
   ];
 
   if (showLoginPage) {
@@ -138,9 +140,15 @@ const UD_MyRequests = () => {
                       style={{
                         color:
                           item[column.key] === 0
-                            ? "#f00" //red
+                            ? "#cccccc" //lightgray
                             : item[column.key] === 1
-                            ? "#000" //black
+                            ? "#996633" //brown
+                            : item[column.key] === 5
+                            ? "#ff00ff"
+                            : item[column.key] === 6
+                            ? "#ff3333"
+                            : item[column.key] === 7
+                            ? "#66a3ff" // blue
                             : "inherit", // Default color if not Awaiting Offer or Offer Received
                       }}
                     >
@@ -148,28 +156,26 @@ const UD_MyRequests = () => {
                     </span>
                   ) : column.key === "rDate" ? (
                     formatDate(item[column.key])
-                  ) : column.key === "offerCount" ? (
+                  ) : column.key === "selectoffer" ? (
                     <Mod_AcceptRejectOffer
                       id={item._id}
                       setRequests={setRequests}
                     />
                   ) : column.key === "rImage" ? (
                     item.rImage.length > 0 ? (
-                      `${item.rImage.length} Image(s) available`
+                      item.rImage[0]
                     ) : (
                       "No image available"
                     )
                   ) : column.key === "actions" ? (
-                    <div style={{ display: "flex", gap: "10px" }}>
-                      <Button
-                        auto
-                        icon={<FaTrash />}
-                        color="error"
-                        onClick={() => deleteRequestById(item._id)}
-                      >
-                        Delete
-                      </Button>
-                    </div>
+                    <Button
+                      auto
+                      color="error"
+                      onClick={() => deleteRequestById(item._id)}
+                      className="text-red-400 font-extrabold text-[1.75rem] text-center"
+                    >
+                      {BsXCircle()}
+                    </Button>
                   ) : (
                     item[column.key]
                   )}

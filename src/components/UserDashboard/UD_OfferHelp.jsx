@@ -12,7 +12,7 @@ import {
   Spinner,
   Button,
 } from "@nextui-org/react";
-import { FaTrash } from "react-icons/fa";
+import { BsXCircle, BsCheckCircle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import Mod_OfferHelp from "./Mod_OfferHelp";
 import PleaseLogin from "../PleaseLogin";
@@ -136,23 +136,33 @@ const UD_OfferHelp = () => {
                       style={{
                         color:
                           item[column.key] === 0
-                            ? "orange"
+                            ? "#cccccc" //lightgray
                             : item[column.key] === 1
-                            ? "green"
-                            : "inherit",
+                            ? "#996633" //brown
+                            : item[column.key] === 5
+                            ? "#ff00ff"
+                            : item[column.key] === 6
+                            ? "#ff3333"
+                            : item[column.key] === 7
+                            ? "#66a3ff" // blue
+                            : "inherit", // Default color if not Awaiting Offer or Offer Received
                       }}
                     >
                       {statusLabels[item[column.key]] || "Unknown Status"}
                     </span>
                   ) : column.key === "rDate" ? (
                     formatDate(item[column.key])
-                  ) : column.key === "offerCount" ? (
-                    item[column.key]
+                  ) : column.key === "oUserId" ? (
+                    item[rUserId]?.length ? (
+                      item[rUserId].length
+                    ) : (
+                      ""
+                    )
                   ) : column.key === "rImage" ? (
                     item.rImage.length > 0 ? (
-                      "Image available"
+                      "yes"
                     ) : (
-                      "No image available"
+                      "no"
                     )
                   ) : column.key === "actions" ? (
                     <div style={{ display: "flex", gap: "10px" }}>
@@ -162,11 +172,11 @@ const UD_OfferHelp = () => {
                       />
                       <Button
                         auto
-                        icon={<FaTrash />}
                         color="error"
                         onClick={() => deleteRequestById(item._id)}
+                        className="text-red-400 font-extrabold text-[1.75rem] text-center"
                       >
-                        Delete
+                        {BsXCircle()}
                       </Button>
                     </div>
                   ) : (

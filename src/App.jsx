@@ -22,7 +22,6 @@ import Footer from "./components/Footer";
 // import Contact from "./components/Contact";
 import AuthProvider from "./context/AuthProvider";
 import Navbar from "./components/Navbar";
-import Profile from "./components/Profile_old";
 import Mod_MyProfile from "./components/MyProfile/Mod_MyProfile";
 import AdminDashboard from "./components/AdminDashboard";
 
@@ -37,7 +36,6 @@ const protectedLinks = [
   { name: "+ Add new request", value: "/app/requests" },
   { name: "User Dashboard", value: "/app/user-dashboard" },
   // { name: "My Profile", value: "/app/my-profile" },
-  // { name: "MyP-old", value: "/app/my-profile-old" },
 ];
 
 const PageLayout = ({ links, showLogout }) => {

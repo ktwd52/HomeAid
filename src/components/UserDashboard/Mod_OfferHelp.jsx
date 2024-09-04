@@ -64,7 +64,7 @@ export default function Mod_OfferHelp({ id, isDisabled }) {
   return (
     <>
       <ToastContainer />
-      <Button onPress={onOpen} disabled={isDisabled}>
+      <Button color="primary" onPress={onOpen}>
         Offer Help
       </Button>
       <Modal
