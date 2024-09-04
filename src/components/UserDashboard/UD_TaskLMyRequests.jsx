@@ -99,9 +99,9 @@ const UD_TaskLMyRequests = () => {
     { key: "rStatus", label: "STATUS" },
     { key: "rCategory", label: "REQUEST CATEGORY" },
     { key: "rText", label: "REQUEST TEXT" },
-    { key: "oText", label: "REQUEST TEXT" },
     { key: "rDate", label: "REQUEST DATE" },
-    { key: "oDate", label: "REQUEST DATE" },
+    { key: "oText", label: "OFFER TEXT" },
+    { key: "oDate", label: "OFFERED DATE" },
     { key: "actions", label: "CLOSE REQUEST" }, // New column for action buttons
   ];
   // If showLoginPage is true, render the PleaseLogin component
