@@ -5,7 +5,7 @@ import axios from "axios";
 import { Input, Image, Tabs, Tab, Button } from "@nextui-org/react";
 import ENVConfig from "../../Utils/env.config";
 import { AuthContext } from "../../context/AuthProvider";
-import UploadProfileImg from "../ImageUpload/UploadProfileImg";
+import UploadProfileImg from "./UploadProfileImg";
 
 export default function Mod_MyProfile() {
   const { user } = useContext(AuthContext);

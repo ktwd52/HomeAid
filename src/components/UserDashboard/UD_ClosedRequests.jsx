@@ -1,7 +1,7 @@
 // Track accepted Offer(s)
-import ENVConfig from "../../Utils/env.config";
+import ENVConfig from "../../Utils/env.config.js";
 import axios from "axios";
-import formatDate from "../../Utils/formatDate";
+import formatDate from "../../Utils/formatDate.js";
 import React, { useEffect, useState, useContext } from "react";
 import {
   Table,
@@ -15,10 +15,10 @@ import {
 } from "@nextui-org/react";
 import { FaTrash, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Mod_CloseRequest from "./Mod_CloseRequest";
+import Mod_CloseRequest from "./Mod_CloseRequest.jsx";
 import Mod_RequestDetails from "./Mod_RequestDetails.jsx";
-import PleaseLogin from "../PleaseLogin";
-import { AuthContext } from "../../context/AuthProvider";
+import PleaseLogin from "../PleaseLogin.jsx";
+import { AuthContext } from "../../context/AuthProvider.jsx";
 
 //Data Table for logged in user Requests where rStatus < 2
 const UD_TaskLMyRequests = () => {
@@ -35,7 +35,7 @@ const UD_TaskLMyRequests = () => {
         const res = await axios.get(
           `${ENVConfig.API_ServerURL}/requests?rUserId=${user._id}`,
           {
-            params: { rStatus: { $in: [5, 7] } },
+            params: { rStatus: { $in: [6, 9] } },
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -62,36 +62,12 @@ const UD_TaskLMyRequests = () => {
     getRequests();
   }, []);
 
-  const deleteRequestById = async (id) => {
-    try {
-      await axios.delete(`${ENVConfig.API_ServerURL}/requests/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setRequests(requests.filter((request) => request._id !== id));
-    } catch (error) {
-      // Check if the error response exists and display the error message
-      if (error.response) {
-        console.error(
-          `(${error.response.status}) ${error.response.data.error}`
-        );
-      } else {
-        console.log("An unknown error happened: ", error);
-      }
-    }
-  };
-
-  const viewDetails = (id) => {
-    navigate(`/request-details/${id}`);
-  };
-
   const statusLabels = {
     0: "Awaiting Offer",
     1: "Offer Received",
     5: "Offer Accepted",
     6: "Request deleted",
-    7: "Request in Progress",
+    7: "In Progress",
     9: "Finished",
   };
 
@@ -132,25 +108,11 @@ const UD_TaskLMyRequests = () => {
             <TableRow key={item._id}>
               {columns.map((column) => (
                 <TableCell key={column.key}>
-                  {column.key === "rStatus" ? (
-                    statusLabels[item[column.key]] || "Unknown Status"
-                  ) : column.key === "rDate" ? (
-                    formatDate(item[column.key])
-                  ) : column.key === "offerCount" ? (
-                    <Mod_RequestDetails
-                      id={item._id}
-                      setRequests={setRequests}
-                    />
-                  ) : column.key === "actions" ? (
-                    <div style={{ display: "flex", gap: "10px" }}>
-                      <Mod_CloseRequest
-                        id={item._id}
-                        setRequest={setRequests}
-                      />
-                    </div>
-                  ) : (
-                    item[column.key]
-                  )}
+                  {column.key === "rStatus"
+                    ? statusLabels[item[column.key]] || "Unknown Status"
+                    : column.key === "rDate"
+                    ? formatDate(item[column.key])
+                    : item[column.key]}
                 </TableCell>
               ))}
             </TableRow>

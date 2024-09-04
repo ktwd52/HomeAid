@@ -5,18 +5,19 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
-  Slider,
   Textarea,
   Button,
 } from "@nextui-org/react";
 import axios from "axios";
 import ENVConfig from "../../Utils/env.config";
+import { Rating } from "@smastrom/react-rating";
 import { useState, useContext } from "react";
 
 export default function Mod_CloseRequest({ id, setRequest }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [feedback, setFeedback] = useState("");
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(0); // Initial value
+
   // const { user } = useContext(AuthContext);
 
   const handleClosingRequest = async (id, onClose) => {
@@ -61,16 +62,10 @@ export default function Mod_CloseRequest({ id, setRequest }) {
                     maxRows={4}
                   />
                 </div>
-                <Slider
-                  label="Rating the Offer"
-                  step={0.5}
-                  maxValue={5}
-                  minValue={0}
-                  defaultValue={[4]}
-                  showSteps={true}
-                  orientation="horizontal"
-                  onChange={(value) => setRating(value)}
+                <Rating
+                  style={{ maxWidth: 250 }}
                   value={rating}
+                  onChange={setRating}
                 />
               </ModalBody>
               <ModalFooter>

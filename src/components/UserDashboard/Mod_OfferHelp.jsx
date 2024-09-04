@@ -67,7 +67,12 @@ export default function Mod_OfferHelp({ id, isDisabled }) {
       <Button onPress={onOpen} disabled={isDisabled}>
         Offer Help
       </Button>
-      <Modal size="5xl" isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal
+        className="bg-gradient-to-b from-white-100 to-gray-400"
+        size="5xl"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      >
         <ModalContent>
           {(onClose) => (
             <>
@@ -75,7 +80,7 @@ export default function Mod_OfferHelp({ id, isDisabled }) {
                 Offering Help for the Request
               </ModalHeader>
               <ModalBody>
-                <div className="flex justify-items-start">
+                <div className="flex w-5/6 justify-items-start">
                   <label htmlFor="oText">
                     Offer Description:
                     <Textarea
@@ -83,8 +88,9 @@ export default function Mod_OfferHelp({ id, isDisabled }) {
                       isRequired="true"
                       label="How can you help?"
                       labelPlacement="outside"
+                      size="lg"
                       placeholder="Please enter your offer description: max (3 rows)"
-                      className="max-w-xs"
+                      className="h-[100px] max-w-xs"
                       maxRows={3}
                       value={offerText}
                     />
@@ -92,6 +98,7 @@ export default function Mod_OfferHelp({ id, isDisabled }) {
                   Offer Date:
                   <label htmlFor="oDate">
                     <Calendar
+                      className="flex"
                       aria-label="Date"
                       onChange={setOfferDate} // Set date directly
                       defaultValue={offerDate}
