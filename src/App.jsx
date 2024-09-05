@@ -22,7 +22,7 @@ import Footer from "./components/Footer";
 // import Contact from "./components/Contact";
 import AuthProvider from "./context/AuthProvider";
 import Navbar from "./components/Navbar";
-import Mod_MyProfile from "./components/MyProfile/Mod_MyProfile";
+import MyProfile from "./components/MyProfile/MyProfile";
 import AdminDashboard from "./components/AdminDashboard";
 
 const publicLinks = [
@@ -90,7 +90,7 @@ function App() {
             <Route path="user-dashboard" element={<UserDashboard />} />
             <Route path="admin" element={<AdminDashboard />} />
             {/* <Route path="my-profile-old" element={<Profile />} /> */}
-            <Route path="my-profile" element={<Mod_MyProfile />} />
+            <Route path="my-profile" element={<MyProfile />} />
           </Route>
         </Route>
       </>

@@ -37,6 +37,7 @@ const UD_OfferHelp = () => {
         });
 
         if (res.data) {
+          // console.log("getRequests: ", res.data);
           setRequests(res.data);
         }
       } catch (error) {
@@ -89,12 +90,12 @@ const UD_OfferHelp = () => {
 
   const columns = [
     { key: "rStatus", label: "STATUS" },
-    { key: "rUserId.username", label: "USERNAME" },
+    { key: "rUserId", label: "USERNAME" },
     { key: "rCategory", label: "CATEGORY" },
     { key: "rText", label: "REQUEST TEXT" },
-    { key: "rDate", label: "REQ. DATE" },
+    { key: "rDate", label: "REQUEST DATE" },
     { key: "rImage", label: "PICTURE(S)" },
-    { key: "offerCount", label: "# of OFFERS" },
+    { key: "offerCount", label: "OFFERS RECEIVED" },
     { key: "actions", label: "OFFER HELP" },
   ];
 
@@ -135,9 +136,9 @@ const UD_OfferHelp = () => {
                     <span
                       style={{
                         color:
-                          item[column.key] === 0
+                          item[column.key] === 1
                             ? "#cccccc" //lightgray
-                            : item[column.key] === 1
+                            : item[column.key] === 0
                             ? "#996633" //brown
                             : item[column.key] === 5
                             ? "#ff00ff"
@@ -152,29 +153,44 @@ const UD_OfferHelp = () => {
                     </span>
                   ) : column.key === "rDate" ? (
                     formatDate(item[column.key])
-                  ) : column.key === "oUserId" ? (
-                    item[rUserId]?.length ? (
-                      item[rUserId].length
+                  ) : column.key === "rUserId" ? (
+                    item.rUserId ? (
+                      ((
+                        <img
+                          src={item.rUserId.profileimg}
+                          alt="profile image"
+                          className="w-12"
+                        ></img>
+                      ),
+                      item.rUserId.username)
                     ) : (
-                      ""
+                      "no username found"
                     )
                   ) : column.key === "rImage" ? (
                     item.rImage.length > 0 ? (
-                      "yes"
+                      <img
+                        src={item.rImage[0]}
+                        alt="picture of a problem"
+                        className="w-12 "
+                      ></img>
                     ) : (
-                      "no"
+                      "No image available"
                     )
+                  ) : column.key === "offerCount" ? (
+                    <span className="font-semibold pl-[2rem]">
+                      {item.offerId?.length !== 0 ? item.offerId.length : ""}
+                    </span>
                   ) : column.key === "actions" ? (
                     <div style={{ display: "flex", gap: "10px" }}>
-                      <Mod_OfferHelp
-                        id={item._id}
-                        isDisabled={item.offerId ? true : false}
-                      />
+                      <Mod_OfferHelp id={item._id} />
                       <Button
                         auto
                         color="error"
                         onClick={() => deleteRequestById(item._id)}
                         className="text-red-400 font-extrabold text-[1.75rem] text-center"
+                        isDisabled={
+                          user.role === "admin" && user.isAdmin ? false : true
+                        }
                       >
                         {BsXCircle()}
                       </Button>

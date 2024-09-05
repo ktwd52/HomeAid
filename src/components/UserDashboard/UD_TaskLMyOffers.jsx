@@ -35,7 +35,7 @@ const UD_TaskLMyOffers = () => {
         const res = await axios.get(
           `${ENVConfig.API_ServerURL}/offers?oUserId=${user._id}`,
           {
-            params: { oStatus: { $in: [5, 7] } },
+            params: { oStatus: { $in: [2, 5, 6, 7] } },
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -75,19 +75,19 @@ const UD_TaskLMyOffers = () => {
     }
   };
 
-  const putInProgressById = async (id) => {
-    console.log("id: ", id);
+  const putInProgressById = async (item) => {
     try {
       await axios.put(
-        `${ENVConfig.API_ServerURL}/offers/${id}/inprogress`,
-        { oStatus: 7 },
+        `${ENVConfig.API_ServerURL}/offers/${item._id}/inprogress`,
+        { oStatus: 7, requestId: item.requestId },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      setOffers(offers.filter((offers) => offers._id !== id));
+      console.log(item);
+      setOffers(offers.filter((offers) => offers._id !== item._id));
     } catch (error) {
       console.log(error);
     }
@@ -108,10 +108,12 @@ const UD_TaskLMyOffers = () => {
 
   const columns = [
     { key: "oStatus", label: "STATUS" },
+    { key: "rText", label: "REQUEST TEXT" },
     { key: "oText", label: "OFFER TEXT" },
-    { key: "oDate", label: "DEADLINE OFFERED" },
-    { key: "requestId.rUserId.username", label: "USERNAME REQUESTED" },
-    { key: "actions", label: "ACTIONS" }, // New column for action buttons
+    { key: "rDate", label: "REQUEST DATE" },
+    { key: "oDate", label: "OFFERED DATE" },
+    { key: "oUserId", label: "USERNAME (REQ. BY)" },
+    { key: "actions", label: "START OFFER / WITHDRAW" }, // New column for action buttons
   ];
   // If showLoginPage is true, render the PleaseLogin component
   if (showLoginPage) {
@@ -165,25 +167,32 @@ const UD_TaskLMyOffers = () => {
                       >
                         {statusLabels[item[columnKey]] || "Unknown Status"}
                       </span>
+                    ) : columnKey === "rText" ? (
+                      item.requestId?.rText
                     ) : columnKey === "oDate" ? (
                       formatDate(item[columnKey])
-                    ) : columnKey === "oUserId.username" ? (
-                      item[columnKey]
+                    ) : columnKey === "rDate" ? (
+                      formatDate(item.requestId?.rDate)
+                    ) : columnKey === "oUserId" ? (
+                      item.oUserId ? (
+                        item.oUserId.username
+                      ) : (
+                        "no username found"
+                      )
                     ) : columnKey === "actions" ? (
                       <div style={{ display: "flex", gap: "10px" }}>
                         <Button
                           color="alert"
-                          onClick={() => putInProgressById(item._id)}
-                          className="text-[white] text-[16px]"
+                          onClick={() => putInProgressById(item)}
+                          className="text-[white] text-[2rem]"
                         >
                           {item?.oStatus === 5 ? FcStart() : ""}
                         </Button>
 
                         <Button
-                          isDisabled={item?.oStatus === 5}
                           color="error"
                           onClick={() => deleteMyOfferById(item._id)}
-                          className="text-[black]"
+                          className="text-[black] text-[1.25rem]"
                         >
                           {BsTrash3()}
                         </Button>

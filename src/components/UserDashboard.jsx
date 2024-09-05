@@ -15,9 +15,9 @@ const UserDashboard = () => {
     <div
       className="relative bg-cover w-full h-full"
       style={{
-        backgroundImage: "url('/img/ud-background-1.JPG')",
+        backgroundImage: "url('/img/ud-background-1.png')",
         backgroundRepeat: "center",
-        opacity: 0.8, // Set opacity to 20%
+        opacity: 0.9, // Set opacity to 20%
       }}
     >
       <div className="absolute inset-0 bg-cover bg-center"></div>
@@ -27,7 +27,7 @@ const UserDashboard = () => {
         color="primary"
       >
         <Tab
-          key="allopenrequests"
+          key="myopenrequests"
           title="Accept Offer(s) for my Request(s)"
           className=""
         >

@@ -55,7 +55,7 @@ export default function Mod_AccepRejectOffer({ id, isDisabled, setRequests }) {
     getOffers();
   }, [id]); // Ensure useEffect depends on `id`
 
-  const handleAccept = async (item) => {
+  const handleAccept = async (item, onClose) => {
     try {
       const res = await axios.put(
         `${ENVConfig.API_ServerURL}/offers/${item._id}/accept`,
@@ -71,7 +71,8 @@ export default function Mod_AccepRejectOffer({ id, isDisabled, setRequests }) {
         setRequests((prev) => {
           return prev.filter((request) => request._id !== item.requestId);
         });
-        console.log(res.data);
+        onClose();
+        // console.log(res.data);
       }
     } catch (error) {
       console.log(error);
@@ -107,8 +108,8 @@ export default function Mod_AccepRejectOffer({ id, isDisabled, setRequests }) {
     { key: "oText", label: "OFFER TEXT" },
     { key: "oDate", label: "OFFERED DATE" },
     { key: "oStatus", label: "STATUS" },
-    { key: "oUserId.username", label: "USERNAME" },
-    { key: "actions", label: "ACCEPT/REJECT/DELETE" }, // New column for action buttons
+    { key: "oUserId", label: "USERNAME (OFF. HELP)" },
+    { key: "actions", label: "ACCEPT OFFER | REJECT OFFER" }, // New column for action buttons
   ];
 
   if (showLoginPage) {
@@ -172,14 +173,19 @@ export default function Mod_AccepRejectOffer({ id, isDisabled, setRequests }) {
                                 </span>
                               ) : columnKey === "oDate" ? (
                                 formatDate(item[columnKey])
-                              ) : columnKey === "oUserId.username" ? (
-                                item[columnKey]
+                              ) : columnKey === "oUserId" ? (
+                                item.oUserId ? (
+                                  item.oUserId.username
+                                ) : (
+                                  "no username found"
+                                )
                               ) : columnKey === "actions" ? (
-                                <div style={{ display: "flex", gap: "10px" }}>
+                                <div style={{ display: "flex", gap: "2px" }}>
                                   <Button
-                                    size="sm"
-                                    color="primary"
-                                    onPress={() => handleAccept(item)}
+                                    size="md"
+                                    color="inherit"
+                                    onPress={() => handleAccept(item, onClose)}
+                                    className="text-[1.25rem]"
                                   >
                                     &#9989; {/* Accepting */}
                                   </Button>
@@ -202,9 +208,6 @@ export default function Mod_AccepRejectOffer({ id, isDisabled, setRequests }) {
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
                 </Button>
               </ModalFooter>
             </>

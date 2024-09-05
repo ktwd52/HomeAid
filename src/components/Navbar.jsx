@@ -58,8 +58,7 @@ const Navbar = ({ links, showLogout = false }) => {
                   <User
                     as="button"
                     avatarProps={{
-                      isBordered: true,
-                      //   src: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+                      src: profile?.profileimg ? profile.profileimg : "",
                     }}
                     className="transition-transform"
                     description={`@${profile?.username}`}
