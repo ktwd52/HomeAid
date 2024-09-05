@@ -134,7 +134,7 @@ const UD_TaskLMyOffers = () => {
           )}
         </TableHeader>
         <TableBody
-          emptyContent={"No Offered tasks to display."}
+          emptyContent={"No closed Offers to display."}
           items={offers}
           isLoading={isLoading}
           loadingContent={<Spinner label="Loading..." />}
@@ -145,7 +145,7 @@ const UD_TaskLMyOffers = () => {
               <TableRow key={item._id}>
                 {(columnKey) => (
                   <TableCell>
-                    {columnKey === "rStatus" ? (
+                    {columnKey === "oStatus" ? (
                       <span
                         style={{
                           color:
@@ -159,6 +159,8 @@ const UD_TaskLMyOffers = () => {
                               ? "#ff3333"
                               : item[columnKey] === 7
                               ? "#66a3ff" // blue
+                              : item[columnKey] === 9
+                              ? "#00e600" // blue
                               : "inherit", // Default color if not Awaiting Offer or Offer Received
                         }}
                       >

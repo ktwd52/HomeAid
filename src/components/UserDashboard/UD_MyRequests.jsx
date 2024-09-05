@@ -96,8 +96,6 @@ const UD_MyRequests = () => {
     { key: "rCategory", label: "REQUEST CATEGORY" },
     { key: "rText", label: "REQUEST TEXT" },
     { key: "rDate", label: "REQUEST DATE" },
-    { key: "rDate", label: "REQUEST DATE" },
-
     { key: "rImage", label: "PICTURE(S)" },
     { key: "selectoffer", label: "SELECT OFFER" },
     { key: "actions", label: "DELETE" },
@@ -139,9 +137,9 @@ const UD_MyRequests = () => {
                     <span
                       style={{
                         color:
-                          item[column.key] === 0
+                          item[column.key] === 1
                             ? "#cccccc" //lightgray
-                            : item[column.key] === 1
+                            : item[column.key] === 0
                             ? "#996633" //brown
                             : item[column.key] === 5
                             ? "#ff00ff"
@@ -163,7 +161,11 @@ const UD_MyRequests = () => {
                     />
                   ) : column.key === "rImage" ? (
                     item.rImage.length > 0 ? (
-                      item.rImage[0]
+                      <img
+                        src={item.rImage[0]}
+                        alt="picture of a problem"
+                        className="w-12 "
+                      ></img>
                     ) : (
                       "No image available"
                     )

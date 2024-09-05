@@ -64,7 +64,11 @@ export default function Mod_OfferHelp({ id, isDisabled }) {
   return (
     <>
       <ToastContainer />
-      <Button color="primary" onPress={onOpen}>
+      <Button
+        color="primary"
+        onPress={onOpen}
+        isDisabled={id?.rUserId?.username === user.username ? true : false}
+      >
         Offer Help
       </Button>
       <Modal

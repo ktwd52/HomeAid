@@ -42,7 +42,7 @@ const UD_TaskLMyRequests = () => {
           }
         );
         if (res.data) {
-          // console.log(res.data);
+          console.log(res.data);
           setRequests(res.data);
         }
       } catch (error) {
@@ -132,7 +132,7 @@ const UD_TaskLMyRequests = () => {
             <TableRow key={item._id}>
               {columns.map((column) => (
                 <TableCell key={column.key}>
-                  {column.key === "oStatus" ? (
+                  {column.key === "rStatus" ? (
                     <span
                       style={{
                         color:
@@ -149,10 +149,12 @@ const UD_TaskLMyRequests = () => {
                             : "inherit", // Default color if not Awaiting Offer or Offer Received
                       }}
                     >
-                      {statusLabels[item[column.key]]} || "Unknown Status"
+                      {statusLabels[item[column.key]] || "Unknown Status"}
                     </span>
                   ) : column.key === "rDate" ? (
                     formatDate(item[column.key])
+                  ) : column.key === "rText" ? (
+                    item[column.key]
                   ) : column.key === "offerCount" ? (
                     <Mod_RequestDetails
                       id={item._id}

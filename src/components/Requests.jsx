@@ -6,7 +6,7 @@ import formatDate from "../Utils/formatDate";
 
 export default function Requests() {
   const { user, postRequest } = useContext(AuthContext);
-  const currentDate = formatDate(new Date());
+  const today = new Date().toISOString().split("T")[0];
 
   const {
     register,
@@ -55,7 +55,8 @@ export default function Requests() {
           <input
             type="date"
             {...register("date", { required: true })}
-            min={currentDate} // Set minimum date to today
+            min={today} // Set minimum date to today
+            max={today + 90} // Set maximum date to today + 90 days
             className="p-2 mb-2 bg-amber-100 text-amber-600 w-full sm:w-2/3 md:w-1/3"
           />
           {errors.date?.type === "required" && (

@@ -75,9 +75,9 @@ const UD_TaskLMyRequests = () => {
     { key: "rStatus", label: "STATUS" },
     { key: "rCategory", label: "REQUEST CATEGORY" },
     { key: "rText", label: "REQUEST TEXT" },
-    { key: "oText", label: "REQUEST TEXT" },
+    { key: "oText", label: "OFFER TEXT" },
     { key: "rDate", label: "REQUEST DATE" },
-    { key: "oDate", label: "REQUEST DATE" },
+    { key: "oDate", label: "OFFER DATE" },
     { key: "actions", label: "CLOSE REQUEST" }, // New column for action buttons
   ];
   // If showLoginPage is true, render the PleaseLogin component
@@ -102,7 +102,7 @@ const UD_TaskLMyRequests = () => {
         </TableHeader>
         <TableBody
           items={requests}
-          emptyContent={"No Requests in progress to display."}
+          emptyContent={"No closed Requests to display."}
         >
           {requests.map((item) => (
             <TableRow key={item._id}>

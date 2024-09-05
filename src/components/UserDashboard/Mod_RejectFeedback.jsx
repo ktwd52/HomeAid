@@ -49,7 +49,14 @@ export default function Mod_RejectFeedback({ id, setOffers }) {
 
   return (
     <>
-      <Button onPress={onOpen}>&#10060; {/* Rejecting */}</Button>
+      <Button
+        onPress={onOpen}
+        size="md"
+        color="inherit"
+        className="text-[1.25rem]"
+      >
+        &#10060; {/* Rejecting */}
+      </Button>
       <Modal size="md" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
@@ -75,9 +82,10 @@ export default function Mod_RejectFeedback({ id, setOffers }) {
                   Close
                 </Button>
                 <Button
-                  size="sm"
-                  color="primary"
+                  size="md"
+                  color="inherit"
                   onPress={() => handleReject(id, onClose)}
+                  classNamee="text-[1.25rem]"
                 >
                   Reject Offer
                 </Button>
