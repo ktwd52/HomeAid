@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import HomeAidLogo from "../../public/img/logo/HomeAid-Logo.jpg";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
 import {
@@ -26,7 +25,7 @@ const Navbar = ({ links, showLogout = false }) => {
         <div className="flex flex-row items-center px-8">
           <img
             className="mr-8 hover:animate-spin"
-            src={HomeAidLogo}
+            src="/img/logo/HomeAid-Logo.jpg"
             alt="Logo of the Application with a Home and tools around it"
             width="100"
             height="100"
