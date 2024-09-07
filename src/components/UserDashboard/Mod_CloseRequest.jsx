@@ -24,7 +24,7 @@ export default function Mod_CloseRequest({ id, setRequest }) {
     try {
       console.log("rating: ", rating);
       const res = await axios.put(
-        `${ENVConfig.API_ServerURL}/requests/${id}/close`,
+        `${ENVConfig.API_ServerURL}/offers/${id}/close`,
         { oFeedbackText: feedback, oRating: rating },
         {
           headers: {

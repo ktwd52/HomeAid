@@ -1,5 +1,5 @@
 import { Tabs, Tab } from "@nextui-org/react";
-import UD_OfferHelp from "./UserDashboard/UD_OfferHelp.jsx";
+import UD_manageAdmin from "./UserDashboard/UD_manageAdmin.jsx";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
 
@@ -10,7 +10,7 @@ const AdminDashboard = () => {
     <div
       className="relative bg-cover w-full h-full"
       style={{
-        backgroundImage: "url('/img/ud-background-1.png')",
+        backgroundImage: "url('/img/background/ud-background-1.png')",
         backgroundRepeat: "center",
         opacity: 0.9, // Set opacity to 90%
       }}
@@ -32,7 +32,7 @@ const AdminDashboard = () => {
               waiting for accepting an offer. Please accept offers as soon as
               possible, so your issue could be solved quickly
             </h3>
-            <UD_OfferHelp />
+            {/* <UD_OfferHelp /> */}
           </div>
         </Tab>
         <Tab key="setadmin" title="Manage Admins" color="primary">

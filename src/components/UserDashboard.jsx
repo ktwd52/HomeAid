@@ -5,6 +5,7 @@ import UD_TaskLMyOffers from "./UserDashboard/UD_TaskLMyOffers.jsx";
 import UD_TaskLMyRequests from "./UserDashboard/UD_TaskLMyRequests.jsx";
 import UD_ClosedOffers from "./UserDashboard/UD_ClosedOffers.jsx";
 import UD_ClosedRequests from "./UserDashboard/UD_ClosedRequests.jsx";
+import UpdateProfile from "./Profile.jsx";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
 
@@ -15,7 +16,7 @@ const UserDashboard = () => {
     <div
       className="relative bg-cover w-full h-full"
       style={{
-        backgroundImage: "url('/img/ud-background-1.png')",
+        backgroundImage: "url('/img/background/ud-background-1.png')",
         backgroundRepeat: "center",
         opacity: 0.9, // Set opacity to 20%
       }}
@@ -94,6 +95,11 @@ const UserDashboard = () => {
         <Tab isDisabled key="metrics" title="Metrics / KPI">
           <div className="h-[1000px]">
             <p>Metrics Diagrams etc....</p>
+          </div>
+        </Tab>
+        <Tab key="myprofile" title="MyProfile" color="primary">
+          <div>
+            <UpdateProfile />
           </div>
         </Tab>
       </Tabs>
