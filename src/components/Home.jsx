@@ -32,7 +32,7 @@ function Home() {
         <div className="flex flex-row justify-around">
           <div className="flex flex-col w-80">
             <img
-              src={"/public/img/1.jpg"}
+              src="/img/1.jpg"
               className="w-32 h-32 rounded-tl-2xl rounded-br-2xl"
             />
             <h3 className="text-lg font-bold text-gray-800 py-3">Get help</h3>
@@ -43,7 +43,7 @@ function Home() {
           </div>
           <div className="flex flex-col w-80">
             <img
-              src={"/public/img/2.jpg"}
+              src="/img/2.jpg"
               className="w-32 h-32 rounded-tl-2xl rounded-br-2xl"
             />
             <h3 className="text-lg font-bold text-gray-800 py-3">Offer help</h3>
@@ -69,14 +69,14 @@ function Home() {
             </p>
           </div>
           <div className="flex flex-col w-1/2">
-            <img src={"/public/img/2.jpg"} className="" />
+            <img src="/img/2.jpg" alt="img" className="" />
           </div>
         </div>
       </div>
       <div className="bg-amber-100 mb-10">
         <div className="flex flex-row">
           <div className="flex flex-col w-1/2">
-            <img src={"/public/img/2.jpg"} className="" />
+            <img src="/img/2.jpg" alt="image" className="" />
           </div>
           <div className="flex flex-col w-1/2 p-12 pr-40">
             <h2 className="text-2xl font-bold text-gray-800 py-8">
