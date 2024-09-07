@@ -14,7 +14,6 @@ import {
 import Home from "./components/Home";
 import Requests from "./components/Requests";
 import UserDashboard from "./components/UserDashboard";
-// import AdminDashboard from "./components/AdminDashboard";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Protected from "./components/Protected";
@@ -22,7 +21,7 @@ import Footer from "./components/Footer";
 // import Contact from "./components/Contact";
 import AuthProvider from "./context/AuthProvider";
 import Navbar from "./components/Navbar";
-import MyProfile from "./components/MyProfile/MyProfile";
+import UpdateProfile from "./components/Profile.jsx";
 import AdminDashboard from "./components/AdminDashboard";
 
 const publicLinks = [
@@ -89,8 +88,8 @@ function App() {
             <Route path="requests" element={<Requests />} />
             <Route path="user-dashboard" element={<UserDashboard />} />
             <Route path="admin" element={<AdminDashboard />} />
+            <Route path="my-profile" element={<UpdateProfile />} />
             {/* <Route path="my-profile-old" element={<Profile />} /> */}
-            <Route path="my-profile" element={<MyProfile />} />
           </Route>
         </Route>
       </>

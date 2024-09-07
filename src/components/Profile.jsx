@@ -1,19 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { Input, Image, Tabs, Tab, Button } from "@nextui-org/react";
-import ENVConfig from "../../Utils/env.config";
-import { AuthContext } from "../../context/AuthProvider";
+import ENVConfig from "../Utils/env.config";
+import { AuthContext } from "../context/AuthProvider";
 
-export default function MyProfile() {
-  const { user, getProfile, updateprofile } = useContext(AuthContext);
+export default function updateProfile() {
+  const { user, getProfile } = useContext(AuthContext);
   const APIKey = import.meta.env.VITE_LIQ_APIKEY;
-
-  useEffect(() => {
-    getProfile();
-  }, []);
 
   const [profile, setProfile] = useState({
     firstname: user.firstname || "",
@@ -269,7 +265,7 @@ export default function MyProfile() {
             alt="Profile Avatar"
             className="flex w-[300px] h-[300px] snap-center rounded-full center"
           />
-          <Button size="md" color="primary" onClick={UploadProfileImg()}>
+          <Button size="md" color="primary" onClick={UploadProfileImg}>
             Upload Image
           </Button>
         </div>

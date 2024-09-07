@@ -14,7 +14,7 @@ const Navbar = ({ links, showLogout = false }) => {
   const { user, profile, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const adminLink = { name: "Admin", value: "/app/admin" };
+  const adminLink = { name: "Admin Dashboard", value: "/app/admin" };
 
   console.log("Navbar", user);
 
@@ -25,7 +25,7 @@ const Navbar = ({ links, showLogout = false }) => {
         <div className="flex flex-row items-center px-8">
           <img
             className="mr-8 hover:animate-spin"
-            src="\img\HomeAid-Logo.JPG"
+            src="\img\logo\HomeAid-Logo.JPG"
             alt="Logo of the Application with a Home and tools around it"
             width="100"
             height="100"
