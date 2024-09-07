@@ -16,7 +16,7 @@ const UserDashboard = () => {
     <div
       className="relative bg-cover w-full h-full"
       style={{
-        backgroundImage: "url('/img/background/ud-background-1.png')",
+        backgroundImage: "url('/img/background/ud-background.png')",
         backgroundRepeat: "center",
         opacity: 0.9, // Set opacity to 20%
       }}
