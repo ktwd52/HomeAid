@@ -1,10 +1,16 @@
 import { Tabs, Tab } from "@nextui-org/react";
-import UD_manageAdmin from "./UserDashboard/UD_manageAdmin.jsx";
+import AD_ManageAdmin from "./AdminDashboard/AD_ManageAdmin.jsx";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
+import UD_OfferHelp from "./UserDashboard/UD_OfferHelp.jsx";
 
 const AdminDashboard = () => {
   const { user } = useContext(AuthContext); // Move useContext inside the component
+
+  if (!user) {
+    console.log("Checking for user Context");
+    return <p>Loading...</p>; // Or redirect to login
+  }
 
   return (
     <div
@@ -19,7 +25,7 @@ const AdminDashboard = () => {
       <Tabs
         className=" font-bold "
         aria-label="Disabled Options"
-        color="primary"
+        color="danger"
       >
         <Tab
           key="allopenrequests"
@@ -42,7 +48,8 @@ const AdminDashboard = () => {
           </h3>
 
           <div className="h-[1000px]">
-            <UD_manageAdmin />
+            {console.log("Rendering AD_M  anageAdmin component")}
+            <AD_ManageAdmin />
           </div>
         </Tab>
 
