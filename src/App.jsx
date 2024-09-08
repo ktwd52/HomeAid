@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import {
+  Route,
+  RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
-  Route,
+  useRouteError,
   Outlet,
-  RouterProvider,
   useNavigate,
   Link,
-  useRouteError,
   NavLink,
 } from "react-router-dom";
 // import "./App.css";
@@ -21,7 +21,7 @@ import Footer from "./components/Footer";
 // import Contact from "./components/Contact";
 import AuthProvider from "./context/AuthProvider";
 import Navbar from "./components/Navbar";
-import UpdateProfile from "./components/Profile.jsx";
+import Profile from "./components/Profile.jsx";
 import AdminDashboard from "./components/AdminDashboard";
 
 const publicLinks = [
@@ -34,6 +34,7 @@ const protectedLinks = [
   { name: "Home", value: "/app/" },
   { name: "+ Add new request", value: "/app/requests" },
   { name: "User Dashboard", value: "/app/user-dashboard" },
+  // { name: "Admin Dashboard", value: "/app/admin-dashboard" },
   // { name: "My Profile", value: "/app/my-profile" },
 ];
 
@@ -88,8 +89,7 @@ function App() {
             <Route path="requests" element={<Requests />} />
             <Route path="user-dashboard" element={<UserDashboard />} />
             <Route path="admin" element={<AdminDashboard />} />
-            <Route path="my-profile" element={<UpdateProfile />} />
-            {/* <Route path="my-profile-old" element={<Profile />} /> */}
+            <Route path="my-profile" element={<Profile />} />
           </Route>
         </Route>
       </>

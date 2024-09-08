@@ -7,7 +7,7 @@ import { Input, Image, Tabs, Tab, Button } from "@nextui-org/react";
 import ENVConfig from "../Utils/env.config";
 import { AuthContext } from "../context/AuthProvider";
 
-export default function updateProfile() {
+export default function Profile() {
   const { user, getProfile } = useContext(AuthContext);
   const APIKey = import.meta.env.VITE_LIQ_APIKEY;
 

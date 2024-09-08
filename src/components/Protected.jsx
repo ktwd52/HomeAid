@@ -7,6 +7,7 @@ function Protected() {
 
   useEffect(() => {
     if (user) {
+      console.log("Running useEffect in function Protected", user);
       getProfile();
     }
   }, [user]);

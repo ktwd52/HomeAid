@@ -3,11 +3,9 @@ import React from "react";
 export default function Footer() {
   return (
     <footer className="bg-neutral-200 text-center text-white dark:bg-neutral-600">
-      <div className="flex flex-row flex-wrap justify-between bg-primary text-primary-content bg-yellow-200 p-4 py-6 text-center text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200">
+      <div className="flex flex-row flex-wrap justify-between bg-primary text-primary-content p-4 py-6 text-center text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200">
         {/* <!--Copyright section--> */}
-        <div className="font-bold text-amber-600">
-          © 2024 HomeAid
-        </div>
+        <div className="font-bold text-amber-600">© 2024 HomeAid</div>
         {/* <!-- Links section--> */}
         <div className="flex items-center">
           <a className="mr-9 text-amber-600 dark:text-neutral-200">

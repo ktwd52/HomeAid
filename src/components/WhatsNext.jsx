@@ -20,7 +20,7 @@ export default function WhatsNext() {
         </li>
         <li>
           {" "}
-          Metrics / KPI to get visual information about my reuqests , offers and
+          Metrics / KPI to get visual information about my requests , offers and
           app usage
         </li>
         <li> Sortable, Editable requests and offers with clear rules</li>

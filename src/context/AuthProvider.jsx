@@ -13,7 +13,8 @@ const AuthProvider = ({ children }) => {
 
   const navigate = useNavigate();
 
-  console.log("AuthProvider", user, profile);
+  console.log("AuthProvider function - children started: user: ", user);
+  console.log("AuthProvider function - children started: profile: ", profile);
 
   const login = (data) => {
     axios
@@ -118,7 +119,7 @@ const AuthProvider = ({ children }) => {
       .then((res) => {
         if (res.status === 200) {
           // If logout is successful, log the message and clear the user state
-          console.log("Logout successful");
+          console.log("User logged out successfully");
           setUser(null); // Assuming setUser is a state setter function
         }
       })

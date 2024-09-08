@@ -8,6 +8,7 @@ import UD_ClosedRequests from "./UserDashboard/UD_ClosedRequests.jsx";
 import UpdateProfile from "./Profile.jsx";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
+import AD_ManageAdmin from "./AdminDashboard/AD_ManageAdmin.jsx";
 
 const UserDashboard = () => {
   const { user } = useContext(AuthContext); // Move useContext inside the component
@@ -97,9 +98,10 @@ const UserDashboard = () => {
             <p>Metrics Diagrams etc....</p>
           </div>
         </Tab>
-        <Tab key="myprofile" title="MyProfile" color="primary">
+        <Tab key="rendertest" title="JSXComponentTest" color="primary">
           <div>
             <UpdateProfile />
+            <AD_ManageAdmin />
           </div>
         </Tab>
       </Tabs>
